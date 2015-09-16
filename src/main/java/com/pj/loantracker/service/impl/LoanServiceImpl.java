@@ -8,13 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pj.loantracker.dao.LoanDao;
+import com.pj.loantracker.dao.LoanPaymentDao;
 import com.pj.loantracker.model.Loan;
+import com.pj.loantracker.model.LoanPayment;
 import com.pj.loantracker.service.LoanService;
 
 @Service
 public class LoanServiceImpl implements LoanService {
 
 	@Autowired private LoanDao loanDao;
+	@Autowired private LoanPaymentDao loanPaymentDao;
 	
 	@Transactional
 	@Override
@@ -30,6 +33,12 @@ public class LoanServiceImpl implements LoanService {
 	@Override
 	public Loan getLoan(long id) {
 		return loanDao.get(id);
+	}
+
+	@Transactional
+	@Override
+	public void save(LoanPayment payment) {
+		loanPaymentDao.save(payment);
 	}
 
 }

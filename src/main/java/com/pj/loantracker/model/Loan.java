@@ -2,11 +2,15 @@ package com.pj.loantracker.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 
 @Entity
 public class Loan {
@@ -22,6 +26,10 @@ public class Loan {
 	private BigDecimal interestRate;
 	private Date loanDate;
 
+	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
+	@OrderBy("paymentDate ASC")
+	private List<LoanPayment> payments;
+	
 	public Long getId() {
 		return id;
 	}
@@ -60,6 +68,14 @@ public class Loan {
 
 	public void setLoanDate(Date loanDate) {
 		this.loanDate = loanDate;
+	}
+
+	public List<LoanPayment> getPayments() {
+		return payments;
+	}
+
+	public void setPayments(List<LoanPayment> payments) {
+		this.payments = payments;
 	}
 
 }

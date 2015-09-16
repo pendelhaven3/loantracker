@@ -3,6 +3,7 @@ package com.pj.loantracker.service;
 import java.util.List;
 
 import com.pj.loantracker.model.Loan;
+import com.pj.loantracker.model.LoanPayment;
 
 public interface LoanService {
 
@@ -11,5 +12,7 @@ public interface LoanService {
 	List<Loan> getAllLoans();
 	
 	Loan getLoan(long id);
+
+	void save(LoanPayment payment);
 	
 }
