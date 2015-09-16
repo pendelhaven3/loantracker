@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.pj.loantracker.ControllerFactory;
 import com.pj.loantracker.Parameter;
 import com.pj.loantracker.model.Client;
+import com.pj.loantracker.model.Loan;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -95,6 +96,21 @@ public class StageController {
 		paramMap.put("client", client);
 		
 		loadSceneFromFXML("client", paramMap);
+	}
+
+	public void showLoanListScreen() {
+		loadSceneFromFXML("loanList");
+	}
+
+	public void showAddLoanScreen() {
+		loadSceneFromFXML("loan");
+	}
+
+	public void showUpdateLoanScreen(Loan loan) {
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("loan", loan);
+		
+		loadSceneFromFXML("loan", paramMap);
 	}
 
 }

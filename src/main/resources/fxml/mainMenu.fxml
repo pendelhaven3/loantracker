@@ -7,5 +7,6 @@
 		alignment="center" spacing="10">
 	
 	<Button text="Clients" onAction="#goToClientListScreen" />
+	<Button text="Loans" onAction="#goToLoanListScreen" />
 
 </VBox>
