@@ -52,7 +52,10 @@
 				<columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
 			</LoanPaymentsTableView>
 			
-			<Button text="Add Payment" onAction="#addLoanPayment" />
+			<HBox spacing="10" alignment="center">
+				<Button text="Add Payment" onAction="#addLoanPayment" />
+				<Button text="Delete Payment" onAction="#deleteLoanPayment" />
+			</HBox>
 			
 			<Region />
 			

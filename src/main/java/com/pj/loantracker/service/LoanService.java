@@ -14,5 +14,7 @@ public interface LoanService {
 	Loan getLoan(long id);
 
 	void save(LoanPayment payment);
+
+	void delete(LoanPayment selectedItem);
 	
 }

@@ -175,4 +175,30 @@ public class LoanController extends AbstractController {
 		updateDisplay();
 	}
 
+	@FXML public void deleteLoanPayment() {
+		if (!isPaymentSelected()) {
+			ShowDialog.error("No payment selected");
+			return;
+		}
+		
+		if (!ShowDialog.confirm("Delete payment?")) {
+			return;
+		}
+		
+		try {
+			loanService.delete(paymentsTable.getSelectionModel().getSelectedItem());
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			ShowDialog.unexpectedError();
+			return;
+		}
+		
+		ShowDialog.info("Payment deleted");
+		updateDisplay();
+	}
+
+	private boolean isPaymentSelected() {
+		return !paymentsTable.getSelectionModel().isEmpty();
+	}
+
 }

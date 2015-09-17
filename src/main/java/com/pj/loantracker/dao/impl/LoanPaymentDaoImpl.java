@@ -23,4 +23,13 @@ public class LoanPaymentDaoImpl implements LoanPaymentDao {
 		}
 	}
 
+	@Override
+	public void delete(LoanPayment payment) {
+		entityManager.remove(get(payment.getId()));
+	}
+
+	private LoanPayment get(Long id) {
+		return entityManager.find(LoanPayment.class, id);
+	}
+
 }

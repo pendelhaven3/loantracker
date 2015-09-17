@@ -41,4 +41,10 @@ public class LoanServiceImpl implements LoanService {
 		loanPaymentDao.save(payment);
 	}
 
+	@Transactional
+	@Override
+	public void delete(LoanPayment payment) {
+		loanPaymentDao.delete(payment);
+	}
+
 }
