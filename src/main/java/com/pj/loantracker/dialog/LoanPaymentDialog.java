@@ -93,7 +93,7 @@ public class LoanPaymentDialog extends AbstractDialog {
 
 	@Override
 	protected String getDialogTitle() {
-		if (loan == null) {
+		if (loan != null) {
 			return "Add Loan Payment";
 		} else {
 			return "Edit Loan Payment";
