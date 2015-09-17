@@ -59,6 +59,7 @@ public abstract class AbstractDialog extends Stage {
 		
 		for (Field field : getClass().getDeclaredFields()) {
 			if (field.getAnnotation(Parameter.class) != null) {
+				field.setAccessible(true);
 				try {
 					if (model.containsKey(field.getName())) {
 						field.set(this, model.get(field.getName()));

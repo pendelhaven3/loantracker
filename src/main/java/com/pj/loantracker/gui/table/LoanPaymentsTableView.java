@@ -34,12 +34,22 @@ public class LoanPaymentsTableView extends TableView<LoanPayment> {
 		});
 		amountColumn.getStyleClass().add("right");
 
+		TableColumn<LoanPayment, String> interestColumn = new TableColumn<>("Interest");
+		interestColumn.setCellValueFactory(new StringCellValueFactory<LoanPayment>() {
+
+			@Override
+			protected String getValue(LoanPayment item) {
+				return FormatterUtil.formatAmount(item.getInterest());
+			}
+		});
+		interestColumn.getStyleClass().add("right");
+
 		TableColumn<LoanPayment, String> interestPaidColumn = new TableColumn<>("Interest Paid");
 		interestPaidColumn.setCellValueFactory(new StringCellValueFactory<LoanPayment>() {
 
 			@Override
 			protected String getValue(LoanPayment item) {
-				return "";
+				return FormatterUtil.formatAmount(item.getInterestPaid());
 			}
 		});
 		interestPaidColumn.getStyleClass().add("right");
@@ -49,23 +59,24 @@ public class LoanPaymentsTableView extends TableView<LoanPayment> {
 
 			@Override
 			protected String getValue(LoanPayment item) {
-				return "";
+				return FormatterUtil.formatAmount(item.getPrincipalPaid());
 			}
 		});
 		pricipalPaidColumn.getStyleClass().add("right");
 
-		TableColumn<LoanPayment, String> pricipalRemainingColumn = new TableColumn<>("Principal Pemaining");
+		TableColumn<LoanPayment, String> pricipalRemainingColumn = new TableColumn<>("Principal Remaining");
 		pricipalRemainingColumn.setCellValueFactory(new StringCellValueFactory<LoanPayment>() {
 
 			@Override
 			protected String getValue(LoanPayment item) {
-				return "";
+				return FormatterUtil.formatAmount(item.getPrincipalRemaining());
 			}
 		});
 		pricipalRemainingColumn.getStyleClass().add("right");
 
 		getColumns().add(paymentDateColumn);
 		getColumns().add(amountColumn);
+		getColumns().add(interestColumn);
 		getColumns().add(interestPaidColumn);
 		getColumns().add(pricipalPaidColumn);
 		getColumns().add(pricipalRemainingColumn);
