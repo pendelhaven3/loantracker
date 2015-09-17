@@ -15,7 +15,7 @@
 		<Button text="Add" onAction="#addLoan" />
 	</ToolBar>
 	
-	<LoansTableView fx:id="loansTable">
+	<LoansTableView fx:id="loansTable" VBox.vgrow="always">
 		<columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
 	</LoansTableView>
 	
