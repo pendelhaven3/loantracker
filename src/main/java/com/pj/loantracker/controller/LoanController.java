@@ -98,6 +98,7 @@ public class LoanController extends AbstractController {
 	}
 
 	@FXML public void deleteLoan() {
+		ShowDialog.info("Feature coming soon!");
 		// TODO: Implement this
 	}
 

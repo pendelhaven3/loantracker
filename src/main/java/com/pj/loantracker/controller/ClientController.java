@@ -47,6 +47,7 @@ public class ClientController extends AbstractController {
 	}
 
 	@FXML public void deleteClient() {
+		ShowDialog.info("Feature coming soon!");
 		// TODO: Implement this
 	}
 
