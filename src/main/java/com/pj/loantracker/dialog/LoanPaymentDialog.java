@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.pj.loantracker.Parameter;
 import com.pj.loantracker.gui.component.ShowDialog;
@@ -26,6 +27,8 @@ public class LoanPaymentDialog extends AbstractDialog {
 	@Autowired private LoanService loanService;
 	
 	@FXML private DatePicker paymentDatePicker;
+	@FXML private TextField bankField;
+	@FXML private TextField checkNumberField;
 	@FXML private TextField amountField;
 	
 	@Parameter private Loan loan;
@@ -35,6 +38,8 @@ public class LoanPaymentDialog extends AbstractDialog {
 	public void updateDisplay() {
 		if (payment != null) {
 			paymentDatePicker.setValue(DateUtil.toLocalDate(payment.getPaymentDate()));
+			bankField.setText(payment.getBank());
+			checkNumberField.setText(payment.getCheckNumber());
 			amountField.setText(FormatterUtil.formatAmount(payment.getAmount()));
 		}
 	}
@@ -49,6 +54,16 @@ public class LoanPaymentDialog extends AbstractDialog {
 			payment.setParent(loan);
 		}
 		payment.setPaymentDate(DateUtil.toDate(paymentDatePicker.getValue()));
+		if (!StringUtils.isEmpty(bankField.getText())) {
+			payment.setBank(bankField.getText().trim());
+		} else {
+			payment.setBank(null);
+		}
+		if (!StringUtils.isEmpty(checkNumberField.getText())) {
+			payment.setCheckNumber(checkNumberField.getText().trim());
+		} else {
+			payment.setCheckNumber(null);
+		}
 		payment.setAmount(NumberUtil.toBigDecimal(amountField.getText()));
 		
 		try {

@@ -21,6 +21,8 @@ public class LoanPayment {
 	
 	private BigDecimal amount;
 	private Date paymentDate;
+	private String bank;
+	private String checkNumber;
 
 	@Transient
 	private BigDecimal interest;
@@ -96,6 +98,22 @@ public class LoanPayment {
 
 	public void setInterest(BigDecimal interest) {
 		this.interest = interest;
+	}
+
+	public String getBank() {
+		return bank;
+	}
+
+	public void setBank(String bank) {
+		this.bank = bank;
+	}
+
+	public String getCheckNumber() {
+		return checkNumber;
+	}
+
+	public void setCheckNumber(String checkNumber) {
+		this.checkNumber = checkNumber;
 	}
 
 }

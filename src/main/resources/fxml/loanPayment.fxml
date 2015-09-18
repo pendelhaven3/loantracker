@@ -8,6 +8,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import com.pj.loantracker.gui.component.UppercaseTextField?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" >
 	<center>
@@ -17,10 +18,18 @@
 					GridPane.columnIndex="0" GridPane.rowIndex="0" />
 				<DatePicker fx:id="paymentDatePicker" prefWidth="200"
 					GridPane.columnIndex="1" GridPane.rowIndex="0" />
-				<Label text="Amount:"
+				<Label text="Bank:"
 					GridPane.columnIndex="0" GridPane.rowIndex="1" />
-				<TextField fx:id="amountField" prefWidth="200"
+				<UppercaseTextField fx:id="bankField" prefWidth="200"
 					GridPane.columnIndex="1" GridPane.rowIndex="1" />
+				<Label text="Check Number:"
+					GridPane.columnIndex="0" GridPane.rowIndex="2" />
+				<TextField fx:id="checkNumberField" prefWidth="200"
+					GridPane.columnIndex="1" GridPane.rowIndex="2" />
+				<Label text="Amount:"
+					GridPane.columnIndex="0" GridPane.rowIndex="3" />
+				<TextField fx:id="amountField" prefWidth="200"
+					GridPane.columnIndex="1" GridPane.rowIndex="3" />
 			</GridPane>
 		
 			<HBox spacing="10" alignment="center">

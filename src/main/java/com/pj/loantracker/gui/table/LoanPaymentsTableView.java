@@ -24,6 +24,25 @@ public class LoanPaymentsTableView extends TableView<LoanPayment> {
 		});
 		paymentDateColumn.getStyleClass().add("center");
 
+		TableColumn<LoanPayment, String> bankColumn = new TableColumn<>("Bank");
+		bankColumn.setCellValueFactory(new StringCellValueFactory<LoanPayment>() {
+
+			@Override
+			protected String getValue(LoanPayment item) {
+				return item.getBank();
+			}
+		});
+		bankColumn.getStyleClass().add("center");
+
+		TableColumn<LoanPayment, String> checkNumberColumn = new TableColumn<>("Check Number");
+		checkNumberColumn.setCellValueFactory(new StringCellValueFactory<LoanPayment>() {
+
+			@Override
+			protected String getValue(LoanPayment item) {
+				return item.getCheckNumber();
+			}
+		});
+
 		TableColumn<LoanPayment, String> amountColumn = new TableColumn<>("Amount");
 		amountColumn.setCellValueFactory(new StringCellValueFactory<LoanPayment>() {
 
@@ -75,6 +94,8 @@ public class LoanPaymentsTableView extends TableView<LoanPayment> {
 		pricipalRemainingColumn.getStyleClass().add("right");
 
 		getColumns().add(paymentDateColumn);
+		getColumns().add(bankColumn);
+		getColumns().add(checkNumberColumn);
 		getColumns().add(amountColumn);
 		getColumns().add(interestColumn);
 		getColumns().add(interestPaidColumn);

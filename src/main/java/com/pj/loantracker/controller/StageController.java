@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 @Component
 public class StageController {
 
-	private static final double WIDTH = 1024d;
+	private static final double WIDTH = 1200d;
 	private static final double HEIGHT = 640d;
 	
 	@Autowired private ControllerFactory controllerFactory;
