@@ -32,7 +32,9 @@ public class LoanServiceImpl implements LoanService {
 
 	@Override
 	public Loan getLoan(long id) {
-		return loanDao.get(id);
+		Loan loan = loanDao.get(id);
+		loan.computeLoanPaymentCalculatedFields();
+		return loan;
 	}
 
 	@Transactional

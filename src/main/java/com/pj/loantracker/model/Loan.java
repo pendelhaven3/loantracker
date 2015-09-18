@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
-import javax.persistence.PostLoad;
 
 @Entity
 public class Loan {
@@ -32,14 +31,9 @@ public class Loan {
 	@OrderBy("paymentDate ASC")
 	private List<LoanPayment> payments;
 	
-	@PostLoad
-	private void computeLoanPaymentCalculatedFields() {
+	public void computeLoanPaymentCalculatedFields() {
 		BigDecimal principal = amount;
 		for (LoanPayment payment : payments) {
-			if (payment.getAmount() == null) {
-				continue; // TODO: workaround - @PostLoad is called during update of LoanPayment
-			}
-			
 			BigDecimal interest = principal.multiply(
 					interestRate.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP))
 					.setScale(2, RoundingMode.HALF_UP);
