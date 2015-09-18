@@ -12,11 +12,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.layout.GridPane?>
 <?import com.pj.loantracker.gui.table.LoanPaymentsTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.Region?>
+<?import com.pj.loantracker.gui.component.AppDatePicker?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.pj.loantracker.controller.LoanController">
 	<top>
@@ -42,7 +42,7 @@
 					GridPane.columnIndex="1" GridPane.rowIndex="2" />
 				<Label text="Loan Date"
 					GridPane.columnIndex="0" GridPane.rowIndex="3" />
-				<DatePicker fx:id="loanDatePicker"
+				<AppDatePicker fx:id="loanDatePicker"
 					GridPane.columnIndex="1" GridPane.rowIndex="3" />
 			</GridPane>
 		
