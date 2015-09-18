@@ -14,22 +14,16 @@ import com.pj.loantracker.Parameter;
 import com.pj.loantracker.dialog.LoanPaymentDialog;
 import com.pj.loantracker.gui.component.DoubleClickEventHandler;
 import com.pj.loantracker.gui.component.ShowDialog;
-import com.pj.loantracker.model.Client;
 import com.pj.loantracker.model.Loan;
 import com.pj.loantracker.model.LoanPayment;
-import com.pj.loantracker.service.ClientService;
 import com.pj.loantracker.service.LoanService;
-import com.pj.loantracker.util.DateUtil;
 import com.pj.loantracker.util.FormatterUtil;
-import com.pj.loantracker.util.NumberUtil;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
 @Controller
@@ -38,14 +32,13 @@ public class LoanController extends AbstractController {
 
 	private static final Logger logger = LoggerFactory.getLogger(LoanController.class);
 	
-	@Autowired private ClientService clientService;
 	@Autowired private LoanService loanService;
 	@Autowired private LoanPaymentDialog loanPaymentDialog;
 	
-	@FXML private ComboBox<Client> clientComboBox;
-	@FXML private TextField amountField;
-	@FXML private TextField interestField;
-	@FXML private DatePicker loanDatePicker;
+	@FXML private Label clientLabel;
+	@FXML private Label amountLabel;
+	@FXML private Label interestLabel;
+	@FXML private Label loanDateLabel;
 	@FXML private Button deleteButton;
 	@FXML private TableView<LoanPayment> paymentsTable;
 	
@@ -53,35 +46,27 @@ public class LoanController extends AbstractController {
 	
 	@Override
 	public void updateDisplay() {
-		clientComboBox.setItems(FXCollections.observableList(clientService.getAllClients()));
+		stageController.setTitle("Loan");
 		
-		if (loan != null) {
-			stageController.setTitle("Update Loan");
+		loan = loanService.getLoan(loan.getId());
+		
+		clientLabel.setText(loan.getClient().toString());
+		amountLabel.setText(FormatterUtil.formatAmount(loan.getAmount()));
+		interestLabel.setText(FormatterUtil.formatAmount(loan.getInterestRate()));
+		loanDateLabel.setText(FormatterUtil.formatDate(loan.getLoanDate()));
+		
+		paymentsTable.setItems(FXCollections.observableList(loan.getPayments()));
+		paymentsTable.setOnMouseClicked(new DoubleClickEventHandler() {
 			
-			loan = loanService.getLoan(loan.getId());
-			
-			clientComboBox.setValue(loan.getClient());
-			amountField.setText(FormatterUtil.formatAmount(loan.getAmount()));
-			interestField.setText(FormatterUtil.formatAmount(loan.getInterestRate()));
-			loanDatePicker.setValue(DateUtil.toLocalDate(loan.getLoanDate()));
-			
-			paymentsTable.setItems(FXCollections.observableList(loan.getPayments()));
-			paymentsTable.setOnMouseClicked(new DoubleClickEventHandler() {
-				
-				@Override
-				protected void onDoubleClick(MouseEvent event) {
-					if (!paymentsTable.getSelectionModel().isEmpty()) {
-						updateLoanPayment();
-					}
+			@Override
+			protected void onDoubleClick(MouseEvent event) {
+				if (!paymentsTable.getSelectionModel().isEmpty()) {
+					updateLoanPayment();
 				}
-			});
-			
-			deleteButton.setDisable(false);
-		} else {
-			stageController.setTitle("Add New Loan");
-		}
+			}
+		});
 		
-		clientComboBox.requestFocus();
+		deleteButton.setDisable(false);
 	}
 
 	private void updateLoanPayment() {
@@ -100,80 +85,6 @@ public class LoanController extends AbstractController {
 	@FXML public void deleteLoan() {
 		ShowDialog.info("Feature coming soon!");
 		// TODO: Implement this
-	}
-
-	@FXML public void saveLoan() {
-		if (!validateFields()) {
-			return;
-		}
-		
-		if (loan == null) {
-			loan = new Loan();
-		}
-		loan.setClient(clientComboBox.getValue());
-		loan.setAmount(NumberUtil.toBigDecimal(amountField.getText()));
-		loan.setInterestRate(NumberUtil.toBigDecimal(interestField.getText()));
-		loan.setLoanDate(DateUtil.toDate(loanDatePicker.getValue()));
-		
-		try {
-			loanService.save(loan);
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			ShowDialog.unexpectedError();
-			return;
-		}
-		
-		ShowDialog.info("Loan saved");
-		stageController.showLoanListScreen();
-	}
-
-	private boolean validateFields() {
-		if (clientComboBox.getValue() == null) {
-			ShowDialog.error("Client must be specified");
-			clientComboBox.requestFocus();
-			return false;
-		}
-		
-		if (amountField.getText().isEmpty()) {
-			ShowDialog.error("Amount must be specified");
-			amountField.requestFocus();
-			return false;
-		}
-		
-		if (!NumberUtil.isAmount(amountField.getText())) {
-			ShowDialog.error("Amount must be a valid amount");
-			amountField.requestFocus();
-			return false;
-		}
-		
-		if (interestField.getText().isEmpty()) {
-			ShowDialog.error("Interest must be specified");
-			interestField.requestFocus();
-			return false;
-		}
-		
-		if (!NumberUtil.isAmount(interestField.getText())) {
-			ShowDialog.error("Interest must be a valid number");
-			interestField.requestFocus();
-			return false;
-		}
-		
-		if (loanDatePicker.getValue() == null) {
-			ShowDialog.error("Loan Date must be specified");
-			loanDatePicker.requestFocus();
-			return false;
-		}
-		
-		return true;
-	}
-
-	@FXML public void addLoanPayment() {
-		Map<String, Object> model = new HashMap<>();
-		model.put("loan", loan);
-		
-		loanPaymentDialog.showAndWait(model);
-		
-		updateDisplay();
 	}
 
 	@FXML public void deleteLoanPayment() {
@@ -200,6 +111,22 @@ public class LoanController extends AbstractController {
 
 	private boolean isPaymentSelected() {
 		return !paymentsTable.getSelectionModel().isEmpty();
+	}
+
+	@FXML public void addLoanPayment() {
+		Map<String, Object> model = new HashMap<>();
+		model.put("loan", loan);
+		
+		loanPaymentDialog.showAndWait(model);
+		
+		updateDisplay();
+	}
+
+	@FXML public void updateLoan() {
+		Map<String, Object> model = new HashMap<>();
+		model.put("loan", loan);
+		
+		stageController.showUpdateLoanScreen(loan);
 	}
 
 }

@@ -32,7 +32,7 @@ public class LoanListController extends AbstractController {
 			@Override
 			protected void onDoubleClick(MouseEvent event) {
 				if (!loansTable.getSelectionModel().isEmpty()) {
-					stageController.showUpdateLoanScreen(
+					stageController.showLoanScreen(
 							loansTable.getSelectionModel().getSelectedItem());
 				}
 			}

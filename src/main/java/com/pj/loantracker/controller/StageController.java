@@ -103,10 +103,17 @@ public class StageController {
 	}
 
 	public void showAddLoanScreen() {
-		loadSceneFromFXML("loan");
+		loadSceneFromFXML("addEditLoan");
 	}
 
 	public void showUpdateLoanScreen(Loan loan) {
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("loan", loan);
+		
+		loadSceneFromFXML("addEditLoan", paramMap);
+	}
+
+	public void showLoanScreen(Loan loan) {
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("loan", loan);
 		

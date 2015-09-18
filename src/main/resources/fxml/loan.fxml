@@ -8,7 +8,6 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.text.Text?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ComboBox?>
@@ -28,25 +27,28 @@
 	<center>
 		<VBox alignment="center" spacing="10">
 			<GridPane vgap="10" alignment="center">
-				<Label text="Client" prefWidth="100" 
+				<Label text="Client" prefWidth="100"
 					GridPane.columnIndex="0" GridPane.rowIndex="0" />
-				<ComboBox fx:id="clientComboBox" prefWidth="300"
+				<Label fx:id="clientLabel" prefWidth="300"
 					GridPane.columnIndex="1" GridPane.rowIndex="0" />
+				<Label prefWidth="50"
+					GridPane.columnIndex="2" GridPane.rowIndex="0" />
 				<Label text="Amount"
+					GridPane.columnIndex="3" GridPane.rowIndex="0" />
+				<Label fx:id="amountLabel"
+					GridPane.columnIndex="4" GridPane.rowIndex="0" />
+					
+				<Label text="Loan Date" prefWidth="120"
 					GridPane.columnIndex="0" GridPane.rowIndex="1" />
-				<TextField fx:id="amountField"
+				<Label fx:id="loanDateLabel"
 					GridPane.columnIndex="1" GridPane.rowIndex="1" />
-				<Label text="Interest (%)"
-					GridPane.columnIndex="0" GridPane.rowIndex="2" />
-				<TextField fx:id="interestField"
-					GridPane.columnIndex="1" GridPane.rowIndex="2" />
-				<Label text="Loan Date"
-					GridPane.columnIndex="0" GridPane.rowIndex="3" />
-				<AppDatePicker fx:id="loanDatePicker"
-					GridPane.columnIndex="1" GridPane.rowIndex="3" />
+				<Label text="Interest (%)" prefWidth="120"
+					GridPane.columnIndex="3" GridPane.rowIndex="1" />
+				<Label fx:id="interestLabel"
+					GridPane.columnIndex="4" GridPane.rowIndex="1" />
 			</GridPane>
 		
-			<Button text="Save" onAction="#saveLoan" />
+			<Button text="Update Loan" onAction="#updateLoan" />
 			
 			<LoanPaymentsTableView fx:id="paymentsTable">
 				<columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
@@ -56,8 +58,6 @@
 				<Button text="Add Payment" onAction="#addLoanPayment" />
 				<Button text="Delete Payment" onAction="#deleteLoanPayment" />
 			</HBox>
-			
-			<Region />
 			
 		</VBox>
 	</center>
