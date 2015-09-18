@@ -35,7 +35,7 @@ public class Loan {
 		BigDecimal principal = amount;
 		for (LoanPayment payment : payments) {
 			BigDecimal interest = principal.multiply(
-					interestRate.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP))
+					interestRate.divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP))
 					.setScale(2, RoundingMode.HALF_UP);
 			payment.setInterest(interest);
 			
