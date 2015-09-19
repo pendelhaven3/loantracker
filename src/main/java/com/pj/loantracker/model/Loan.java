@@ -37,6 +37,17 @@ public class Loan {
 	private LoanType type;
 	
 	public void computeLoanPaymentCalculatedFields() {
+		switch (type) {
+		case STANDARD:
+			computeStandardPaymentCalculatedFields();
+			break;
+		case ADVANCE_INTEREST:
+			computeAdvanceInterestPaymentCalculatedFields();
+			break;
+		}
+	}
+	
+	private void computeStandardPaymentCalculatedFields() {
 		BigDecimal principal = amount;
 		for (LoanPayment payment : payments) {
 			BigDecimal interest = principal.multiply(
@@ -53,6 +64,33 @@ public class Loan {
 				payment.setPrincipalPaid(BigDecimal.ZERO);
 				payment.setPrincipalRemaining(principal.add(interest.subtract(payment.getAmount())));
 			}
+			principal = payment.getPrincipalRemaining();
+		}
+	}
+
+	/*
+	 * Variables:
+	 * x = principal paid
+	 * y = interest paid
+	 * 
+	 * Equation 1:
+	 * x + y = payment
+	 * 
+	 * Equation 2:
+	 * y = (principal - x) * rate
+	 * 
+	 * Solve for x and y!
+	 * 
+	 */
+	private void computeAdvanceInterestPaymentCalculatedFields() {
+		BigDecimal principal = amount;
+		BigDecimal rate = interestRate.divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
+		for (LoanPayment payment : payments) {
+			payment.setPrincipalPaid(payment.getAmount().subtract(rate.multiply(principal))
+					.divide(BigDecimal.ONE.subtract(rate), 2, RoundingMode.HALF_UP));
+			payment.setInterestPaid(payment.getAmount().subtract(payment.getPrincipalPaid()));
+			payment.setInterest(payment.getInterestPaid());
+			payment.setPrincipalRemaining(principal.subtract(payment.getPrincipalPaid()));
 			principal = payment.getPrincipalRemaining();
 		}
 	}
