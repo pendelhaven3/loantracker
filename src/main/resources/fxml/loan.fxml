@@ -26,6 +26,7 @@
 	</top>
 	<center>
 		<VBox alignment="center" spacing="10">
+			<padding><Insets top="10" bottom="10" /></padding>
 			<GridPane vgap="10" alignment="center">
 				<Label text="Client" prefWidth="100"
 					GridPane.columnIndex="0" GridPane.rowIndex="0" />
@@ -46,6 +47,11 @@
 					GridPane.columnIndex="3" GridPane.rowIndex="1" />
 				<Label fx:id="interestLabel"
 					GridPane.columnIndex="4" GridPane.rowIndex="1" />
+					
+				<Label text="Loan Type" prefWidth="120"
+					GridPane.columnIndex="0" GridPane.rowIndex="2" />
+				<Label fx:id="loanTypeLabel"
+					GridPane.columnIndex="1" GridPane.rowIndex="2" />
 			</GridPane>
 		
 			<Button text="Update Loan" onAction="#updateLoan" />

@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -30,6 +32,9 @@ public class Loan {
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
 	@OrderBy("paymentDate ASC")
 	private List<LoanPayment> payments;
+	
+	@Enumerated(EnumType.STRING)
+	private LoanType type;
 	
 	public void computeLoanPaymentCalculatedFields() {
 		BigDecimal principal = amount;
@@ -98,6 +103,14 @@ public class Loan {
 
 	public void setPayments(List<LoanPayment> payments) {
 		this.payments = payments;
+	}
+
+	public LoanType getType() {
+		return type;
+	}
+
+	public void setType(LoanType type) {
+		this.type = type;
 	}
 
 }
