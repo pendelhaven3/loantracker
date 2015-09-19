@@ -52,11 +52,22 @@ public class LoansTableView extends TableView<Loan> {
 			}
 		});
 		loanDateColumn.getStyleClass().add("center");
+		
+		TableColumn<Loan, String> typeColumn = new TableColumn<>("Type");
+		typeColumn.setCellValueFactory(new StringCellValueFactory<Loan>() {
+
+			@Override
+			protected String getValue(Loan item) {
+				return item.getType().toString();
+			}
+		});
+		typeColumn.getStyleClass().add("center");
 
 		getColumns().add(clientColumn);
 		getColumns().add(amountColumn);
 		getColumns().add(interestRateColumn);
 		getColumns().add(loanDateColumn);
+		getColumns().add(typeColumn);
 	}
 	
 }
