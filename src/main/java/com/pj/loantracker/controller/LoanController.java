@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.pj.loantracker.Parameter;
+import com.pj.loantracker.dialog.AmortizationTableDialog;
 import com.pj.loantracker.dialog.LoanPaymentDialog;
 import com.pj.loantracker.gui.component.DoubleClickEventHandler;
 import com.pj.loantracker.gui.component.ShowDialog;
@@ -34,6 +35,7 @@ public class LoanController extends AbstractController {
 	
 	@Autowired private LoanService loanService;
 	@Autowired private LoanPaymentDialog loanPaymentDialog;
+	@Autowired private AmortizationTableDialog amortizationTableDialog;
 	
 	@FXML private Label clientLabel;
 	@FXML private Label amountLabel;
@@ -131,6 +133,13 @@ public class LoanController extends AbstractController {
 		model.put("loan", loan);
 		
 		stageController.showUpdateLoanScreen(loan);
+	}
+
+	@FXML public void generateAmortizationTable() {
+		Map<String, Object> model = new HashMap<>();
+		model.put("loan", loan);
+		
+		amortizationTableDialog.showAndWait(model);
 	}
 
 }

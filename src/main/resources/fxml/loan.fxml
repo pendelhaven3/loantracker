@@ -54,7 +54,10 @@
 					GridPane.columnIndex="1" GridPane.rowIndex="2" />
 			</GridPane>
 		
-			<Button text="Update Loan" onAction="#updateLoan" />
+			<HBox spacing="10" alignment="center">
+				<Button text="Update Loan" onAction="#updateLoan" />
+				<Button text="Generate Amortization Table" onAction="#generateAmortizationTable" />
+			</HBox>
 			
 			<LoanPaymentsTableView fx:id="paymentsTable">
 				<columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>

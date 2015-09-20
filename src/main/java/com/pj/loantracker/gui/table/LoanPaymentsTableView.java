@@ -9,11 +9,15 @@ import javafx.scene.control.TableView;
 
 public class LoanPaymentsTableView extends TableView<LoanPayment> {
 
+	private boolean showCheckColumn = true;
+	
 	public LoanPaymentsTableView() {
 		initializeColumns();
 	}
 
-	private void initializeColumns() {
+	public void initializeColumns() {
+		getColumns().clear();
+		
 		TableColumn<LoanPayment, String> paymentDateColumn = new TableColumn<>("Payment Date");
 		paymentDateColumn.setCellValueFactory(new StringCellValueFactory<LoanPayment>() {
 
@@ -94,13 +98,19 @@ public class LoanPaymentsTableView extends TableView<LoanPayment> {
 		pricipalRemainingColumn.getStyleClass().add("right");
 
 		getColumns().add(paymentDateColumn);
-		getColumns().add(bankColumn);
-		getColumns().add(checkNumberColumn);
+		if (showCheckColumn) {
+			getColumns().add(bankColumn);
+			getColumns().add(checkNumberColumn);
+		}
 		getColumns().add(amountColumn);
 		getColumns().add(interestColumn);
 		getColumns().add(interestPaidColumn);
 		getColumns().add(pricipalPaidColumn);
 		getColumns().add(pricipalRemainingColumn);
+	}
+	
+	public void setShowCheckColumn(boolean showCheckColumn) {
+		this.showCheckColumn = showCheckColumn;
 	}
 	
 }
