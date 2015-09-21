@@ -13,7 +13,6 @@ import com.pj.loantracker.model.Client;
 import com.pj.loantracker.service.ClientService;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 @Controller
@@ -25,7 +24,6 @@ public class ClientController extends AbstractController {
 	@Autowired private ClientService clientService;
 	
 	@FXML private TextField nameField;
-	@FXML private Button deleteButton;
 	
 	@Parameter private Client client;
 	
@@ -35,7 +33,6 @@ public class ClientController extends AbstractController {
 			stageController.setTitle("Update Client");
 			client = clientService.getClient(client.getId());
 			nameField.setText(client.getName());
-			deleteButton.setDisable(false);
 		} else {
 			stageController.setTitle("Add Client");
 		}
@@ -44,11 +41,6 @@ public class ClientController extends AbstractController {
 
 	@FXML public void doOnBack() {
 		stageController.showClientListScreen();
-	}
-
-	@FXML public void deleteClient() {
-		ShowDialog.info("Feature coming soon!");
-		// TODO: Implement this
 	}
 
 	@FXML public void saveClient() {

@@ -11,5 +11,7 @@ public interface ClientDao {
 	List<Client> getAll();
 
 	Client get(long id);
+
+	void delete(Client client);
 	
 }

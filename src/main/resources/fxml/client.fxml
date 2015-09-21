@@ -13,7 +13,6 @@
 	<top>
 		<ToolBar>
 			<Button text="Back" onAction="#doOnBack" />
-			<Button fx:id="deleteButton" text="Delete" onAction="#deleteClient" disable="true" />
 		</ToolBar>
 	</top>
 	<center>

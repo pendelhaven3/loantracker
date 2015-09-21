@@ -37,4 +37,9 @@ public class ClientDaoImpl implements ClientDao {
 		return entityManager.find(Client.class, id);
 	}
 
+	@Override
+	public void delete(Client client) {
+		entityManager.remove(get(client.getId()));
+	}
+
 }

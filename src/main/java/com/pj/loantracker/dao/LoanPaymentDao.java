@@ -7,5 +7,5 @@ public interface LoanPaymentDao {
 	void save(LoanPayment payment);
 
 	void delete(LoanPayment payment);
-	
+
 }

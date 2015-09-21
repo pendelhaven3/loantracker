@@ -32,4 +32,10 @@ public class ClientServiceImpl implements ClientService {
 		return clientDao.get(id);
 	}
 
+	@Transactional
+	@Override
+	public void delete(Client client) {
+		clientDao.delete(client);
+	}
+
 }

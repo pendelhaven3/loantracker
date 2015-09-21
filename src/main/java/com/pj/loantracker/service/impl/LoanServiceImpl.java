@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.pj.loantracker.dao.LoanDao;
 import com.pj.loantracker.dao.LoanPaymentDao;
+import com.pj.loantracker.model.Client;
 import com.pj.loantracker.model.Loan;
 import com.pj.loantracker.model.LoanPayment;
 import com.pj.loantracker.service.LoanService;
@@ -47,6 +48,11 @@ public class LoanServiceImpl implements LoanService {
 	@Override
 	public void delete(LoanPayment payment) {
 		loanPaymentDao.delete(payment);
+	}
+
+	@Override
+	public List<Loan> findAllLoansByClient(Client client) {
+		return loanDao.findAllByClient(client);
 	}
 
 }

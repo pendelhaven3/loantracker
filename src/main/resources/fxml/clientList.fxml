@@ -14,6 +14,7 @@
 	<ToolBar>
 		<Button text="Back" onAction="#doOnBack" />
 		<Button text="Add" onAction="#addClient" />
+		<Button text="Delete" onAction="#deleteClient" />
 	</ToolBar>
 	
 	<TableView fx:id="clientsTable" VBox.vgrow="always">
