@@ -35,7 +35,7 @@ public class Loan {
 	
 	@Enumerated(EnumType.STRING)
 	private LoanType type;
-	
+
 	public void computeLoanPaymentCalculatedFields() {
 		switch (type) {
 		case STANDARD:

@@ -7,10 +7,12 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.stereotype.Component;
 
 import com.pj.loantracker.Parameter;
+import com.pj.loantracker.gui.component.ShowDialog;
 import com.pj.loantracker.gui.table.LoanPaymentsTableView;
 import com.pj.loantracker.model.Loan;
 import com.pj.loantracker.model.LoanPayment;
@@ -41,6 +43,8 @@ public class AmortizationTableDialog extends AbstractDialog {
 		paymentsTable.setShowCheckColumn(false);
 		paymentsTable.setShowInterestColumn(false);
 		paymentsTable.initializeColumns();
+		
+		monthlyPaymentField.requestFocus();
 	}
 
 	@Override
@@ -49,6 +53,10 @@ public class AmortizationTableDialog extends AbstractDialog {
 	}
 
 	@FXML public void generateAmortizationTable() {
+		if (!validateFields()) {
+			return;
+		}
+		
 		Loan loan = new Loan();
 		loan.setAmount(this.loan.getAmount());
 		loan.setLoanDate(this.loan.getLoanDate());
@@ -89,6 +97,50 @@ public class AmortizationTableDialog extends AbstractDialog {
 		
 		paymentsTable.getItems().clear();
 		paymentsTable.getItems().addAll(payments);
+	}
+
+	private boolean validateFields() {
+		if (StringUtils.isEmpty(monthlyPaymentField.getText())) {
+			ShowDialog.error("Monthly Payment must be specified");
+			monthlyPaymentField.requestFocus();
+			return false;
+		}
+		
+		if (!NumberUtil.isAmount(monthlyPaymentField.getText())) {
+			ShowDialog.error("Monthly Payment must be a valid amount");
+			monthlyPaymentField.requestFocus();
+			return false;
+		}
+		
+		if (!isMonthlyPaymentGreaterThanInitialInterest()) {
+			ShowDialog.error("Monthly Payment must be greater than initial interest");
+			monthlyPaymentField.requestFocus();
+			return false;
+		}
+		
+		return true;
+	}
+
+	private boolean isMonthlyPaymentGreaterThanInitialInterest() {
+		Loan loan = new Loan();
+		loan.setAmount(this.loan.getAmount());
+		loan.setLoanDate(this.loan.getLoanDate());
+		loan.setType(this.loan.getType());
+		loan.setInterestRate(this.loan.getInterestRate());
+		
+		BigDecimal amortizationAmount = NumberUtil.toBigDecimal(monthlyPaymentField.getText());
+		LoanPayment payment = new LoanPayment();
+		
+		if (loan.getAmount().compareTo(amortizationAmount) >= 0) {
+			payment.setAmount(amortizationAmount);
+		} else {
+			return true;
+		}
+		
+		loan.setPayments(Arrays.asList(payment));
+		loan.computeLoanPaymentCalculatedFields();
+		
+		return payment.getAmount().compareTo(payment.getInterest()) > 0;
 	}
 	
 }
