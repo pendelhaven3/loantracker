@@ -10,6 +10,7 @@ import javafx.scene.control.TableView;
 public class LoanPaymentsTableView extends TableView<LoanPayment> {
 
 	private boolean showCheckColumn = true;
+	private boolean showInterestColumn = true;
 	
 	public LoanPaymentsTableView() {
 		initializeColumns();
@@ -103,7 +104,9 @@ public class LoanPaymentsTableView extends TableView<LoanPayment> {
 			getColumns().add(checkNumberColumn);
 		}
 		getColumns().add(amountColumn);
-		getColumns().add(interestColumn);
+		if (showInterestColumn) {
+			getColumns().add(interestColumn);
+		}
 		getColumns().add(interestPaidColumn);
 		getColumns().add(pricipalPaidColumn);
 		getColumns().add(pricipalRemainingColumn);
@@ -111,6 +114,10 @@ public class LoanPaymentsTableView extends TableView<LoanPayment> {
 	
 	public void setShowCheckColumn(boolean showCheckColumn) {
 		this.showCheckColumn = showCheckColumn;
+	}
+	
+	public void setShowInterestColumn(boolean showInterestColumn) {
+		this.showInterestColumn = showInterestColumn;
 	}
 	
 }

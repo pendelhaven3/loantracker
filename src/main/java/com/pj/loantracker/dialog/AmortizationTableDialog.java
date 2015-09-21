@@ -35,6 +35,7 @@ public class AmortizationTableDialog extends AbstractDialog {
 	@Override
 	protected void updateDisplay() {
 		paymentsTable.setShowCheckColumn(false);
+		paymentsTable.setShowInterestColumn(false);
 		paymentsTable.initializeColumns();
 	}
 
