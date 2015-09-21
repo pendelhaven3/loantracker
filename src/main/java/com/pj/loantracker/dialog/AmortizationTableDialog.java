@@ -19,6 +19,7 @@ import com.pj.loantracker.model.LoanPayment;
 import com.pj.loantracker.util.NumberUtil;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 @Component
@@ -26,6 +27,7 @@ public class AmortizationTableDialog extends AbstractDialog {
 
 	@FXML private TextField monthlyPaymentField;
 	@FXML private LoanPaymentsTableView paymentsTable;
+	@FXML private Label totalPaymentsLabel;
 	
 	@Parameter private Loan loan;
 	
@@ -97,6 +99,7 @@ public class AmortizationTableDialog extends AbstractDialog {
 		
 		paymentsTable.getItems().clear();
 		paymentsTable.getItems().addAll(payments);
+		totalPaymentsLabel.setText(String.valueOf(payments.size()));
 	}
 
 	private boolean validateFields() {

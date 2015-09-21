@@ -27,6 +27,12 @@
 			<LoanPaymentsTableView fx:id="paymentsTable">
 				<columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
 			</LoanPaymentsTableView>
+			
+			<HBox alignment="center">
+				<Label text="Total Payments:" prefWidth="150" />
+				<Label fx:id="totalPaymentsLabel" />
+			</HBox>
+			
 		</VBox>
 	</center>
 </BorderPane>
