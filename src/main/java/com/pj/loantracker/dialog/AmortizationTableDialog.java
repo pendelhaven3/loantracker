@@ -27,6 +27,10 @@ public class AmortizationTableDialog extends AbstractDialog {
 	
 	@Parameter private Loan loan;
 	
+	public AmortizationTableDialog() {
+		setSceneWidth(800d);
+	}
+	
 	@Override
 	protected String getDialogTitle() {
 		return "Amortization Table";

@@ -15,8 +15,8 @@ import javafx.stage.Stage;
 
 public abstract class AbstractDialog extends Stage {
 
-	private static final int WIDTH = 600;
-	private static final int HEIGHT = 400;
+	private double sceneWidth = 600d;
+	private double sceneHeight = 400d;
 	
 	public AbstractDialog() {
 		setResizable(false);
@@ -49,7 +49,7 @@ public abstract class AbstractDialog extends Stage {
 			throw new RuntimeException(e);
 		}
 		
-		Scene scene = new Scene(root, WIDTH, HEIGHT);
+		Scene scene = new Scene(root, sceneWidth, sceneHeight);
 		scene.getStylesheets().add("css/application.css");
 		setScene(scene);
 	
@@ -92,5 +92,13 @@ public abstract class AbstractDialog extends Stage {
 	protected abstract void updateDisplay();
 
 	protected abstract String getSceneName();
+	
+	public void setSceneWidth(double sceneWidth) {
+		this.sceneWidth = sceneWidth;
+	}
+	
+	public void setSceneHeight(double sceneHeight) {
+		this.sceneHeight = sceneHeight;
+	}
 	
 }
