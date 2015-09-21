@@ -33,6 +33,7 @@ public class AmortizationTableDialog extends AbstractDialog {
 	
 	public AmortizationTableDialog() {
 		setSceneWidth(800d);
+		setSceneHeight(500d);
 	}
 	
 	@Override

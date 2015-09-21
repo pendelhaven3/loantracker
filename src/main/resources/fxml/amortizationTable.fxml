@@ -9,8 +9,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.TableView?>
 <?import com.pj.loantracker.gui.table.LoanPaymentsTableView?>
+<?import javafx.geometry.Insets?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" >
+	<padding><Insets top="10" bottom="10" /></padding>
 	<center>
 		<VBox alignment="center" spacing="10">
 			<GridPane vgap="10" alignment="center">
