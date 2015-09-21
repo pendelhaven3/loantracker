@@ -72,9 +72,25 @@ public class ClientController extends AbstractController {
 			return false;
 		}
 		
-		// TODO: Check for duplicate name!
+		if (isNameAlreadyUsed(nameField.getText())) {
+			ShowDialog.error("Name is already used by an existing record");
+			nameField.requestFocus();
+			return false;
+		}
 		
 		return true;
+	}
+
+	private boolean isNameAlreadyUsed(String name) {
+		Client existing = clientService.findClientByName(name);
+		if (existing != null) {
+			if (client != null) {
+				return !client.equals(existing);
+			} else {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

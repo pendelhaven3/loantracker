@@ -13,5 +13,7 @@ public interface ClientDao {
 	Client get(long id);
 
 	void delete(Client client);
+
+	Client findByName(String name);
 	
 }

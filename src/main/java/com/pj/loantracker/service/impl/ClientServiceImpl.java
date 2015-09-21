@@ -38,4 +38,9 @@ public class ClientServiceImpl implements ClientService {
 		clientDao.delete(client);
 	}
 
+	@Override
+	public Client findClientByName(String name) {
+		return clientDao.findByName(name);
+	}
+
 }

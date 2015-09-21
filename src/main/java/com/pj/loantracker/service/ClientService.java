@@ -13,5 +13,7 @@ public interface ClientService {
 	Client getClient(long id);
 
 	void delete(Client client);
+
+	Client findClientByName(String name);
 	
 }

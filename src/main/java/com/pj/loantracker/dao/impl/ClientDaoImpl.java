@@ -3,7 +3,11 @@ package com.pj.loantracker.dao.impl;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
@@ -40,6 +44,19 @@ public class ClientDaoImpl implements ClientDao {
 	@Override
 	public void delete(Client client) {
 		entityManager.remove(get(client.getId()));
+	}
+
+	@Override
+	public Client findByName(String name) {
+		CriteriaQuery<Client> criteria = entityManager.getCriteriaBuilder().createQuery(Client.class);
+		Root<Client> client = criteria.from(Client.class);
+		criteria.where(client.get("name").in(name));
+		
+		try {
+			return entityManager.createQuery(criteria).getSingleResult();
+		} catch (NoResultException | NonUniqueResultException e) {
+			return null;
+		}
 	}
 
 }
