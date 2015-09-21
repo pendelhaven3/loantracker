@@ -24,6 +24,7 @@
 		
 			<HBox spacing="10" alignment="center">
 				<Button text="Generate" onAction="#generateAmortizationTable" />
+				<Button text="Generate As PDF" onAction="#generateAmortizationTableAsPdf" />
 			</HBox>
 			
 			<LoanPaymentsTableView fx:id="paymentsTable">
