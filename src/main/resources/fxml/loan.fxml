@@ -52,11 +52,17 @@
 					GridPane.columnIndex="0" GridPane.rowIndex="2" />
 				<Label fx:id="loanTypeLabel"
 					GridPane.columnIndex="1" GridPane.rowIndex="2" />
+				<Label text="Status" prefWidth="120"
+					GridPane.columnIndex="3" GridPane.rowIndex="2" />
+				<Label fx:id="statusLabel"
+					GridPane.columnIndex="4" GridPane.rowIndex="2" />
 			</GridPane>
 		
 			<HBox spacing="10" alignment="center">
 				<Button text="Update Loan" onAction="#updateLoan" />
-				<Button text="Generate Amortization Table" onAction="#generateAmortizationTable" />
+				<Button text="Generate Amortization Table" onAction="#generateAmortizationTable" 
+						fx:id="generateAmortizationTableButton" />
+				<Button text="Cancel Loan" onAction="#cancelLoan" fx:id="cancelButton" />
 			</HBox>
 			
 			<LoanPaymentsTableView fx:id="paymentsTable">
@@ -64,8 +70,8 @@
 			</LoanPaymentsTableView>
 			
 			<HBox spacing="10" alignment="center">
-				<Button text="Add Payment" onAction="#addLoanPayment" />
-				<Button text="Delete Payment" onAction="#deleteLoanPayment" />
+				<Button text="Add Payment" onAction="#addLoanPayment" fx:id="addPaymentButton" />
+				<Button text="Delete Payment" onAction="#deleteLoanPayment" fx:id="deletePaymentButton" />
 			</HBox>
 			
 		</VBox>

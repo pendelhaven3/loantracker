@@ -63,11 +63,22 @@ public class LoansTableView extends TableView<Loan> {
 		});
 		typeColumn.getStyleClass().add("center");
 
+		TableColumn<Loan, String> statusColumn = new TableColumn<>("Status");
+		statusColumn.setCellValueFactory(new StringCellValueFactory<Loan>() {
+
+			@Override
+			protected String getValue(Loan item) {
+				return item.getStatus();
+			}
+		});
+		statusColumn.getStyleClass().add("center");
+
 		getColumns().add(clientColumn);
 		getColumns().add(amountColumn);
 		getColumns().add(interestRateColumn);
 		getColumns().add(loanDateColumn);
 		getColumns().add(typeColumn);
+		getColumns().add(statusColumn);
 	}
 	
 }

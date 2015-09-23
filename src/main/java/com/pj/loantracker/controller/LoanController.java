@@ -42,7 +42,12 @@ public class LoanController extends AbstractController {
 	@FXML private Label interestLabel;
 	@FXML private Label loanDateLabel;
 	@FXML private Label loanTypeLabel;
+	@FXML private Label statusLabel;
 	@FXML private Button deleteButton;
+	@FXML private Button generateAmortizationTableButton;
+	@FXML private Button cancelButton;
+	@FXML private Button addPaymentButton;
+	@FXML private Button deletePaymentButton;
 	@FXML private TableView<LoanPayment> paymentsTable;
 	
 	@Parameter private Loan loan;
@@ -60,19 +65,28 @@ public class LoanController extends AbstractController {
 		if (loan.getType() != null) {
 			loanTypeLabel.setText(loan.getType().toString());
 		}
+		statusLabel.setText(loan.getStatus());
 		
 		paymentsTable.setItems(FXCollections.observableList(loan.getPayments()));
-		paymentsTable.setOnMouseClicked(new DoubleClickEventHandler() {
-			
-			@Override
-			protected void onDoubleClick(MouseEvent event) {
-				if (!paymentsTable.getSelectionModel().isEmpty()) {
-					updateLoanPayment();
+		if (!loan.isCancelled()) {
+			paymentsTable.setOnMouseClicked(new DoubleClickEventHandler() {
+				
+				@Override
+				protected void onDoubleClick(MouseEvent event) {
+					if (!paymentsTable.getSelectionModel().isEmpty()) {
+						updateLoanPayment();
+					}
 				}
-			}
-		});
+			});
+		}
 		
 		deleteButton.setDisable(false);
+		
+		boolean disable = loan.isCancelled();
+		generateAmortizationTableButton.setDisable(disable);
+		cancelButton.setDisable(disable);
+		addPaymentButton.setDisable(disable);
+		deletePaymentButton.setDisable(disable);
 	}
 
 	private void updateLoanPayment() {
@@ -140,6 +154,16 @@ public class LoanController extends AbstractController {
 		model.put("loan", loan);
 		
 		amortizationTableDialog.showAndWait(model);
+	}
+
+	@FXML public void cancelLoan() {
+		if (!ShowDialog.confirm("Cancel loan?")) {
+			return;
+		}
+		
+		loan.setCancelled(true);
+		loanService.save(loan);
+		updateDisplay();
 	}
 
 }

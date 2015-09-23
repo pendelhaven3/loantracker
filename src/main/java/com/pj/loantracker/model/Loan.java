@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -14,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
+import javax.persistence.PrePersist;
 
 @Entity
 public class Loan {
@@ -36,6 +38,14 @@ public class Loan {
 	@Enumerated(EnumType.STRING)
 	private LoanType type;
 
+	@Column(columnDefinition = "boolean default false")
+	private boolean cancelled;
+	
+	@PrePersist
+	private void preInsert() {
+		cancelled = false;
+	}
+	
 	public void computeLoanPaymentCalculatedFields() {
 		switch (type) {
 		case STANDARD:
@@ -95,6 +105,14 @@ public class Loan {
 		}
 	}
 	
+	public String getStatus() {
+		if (cancelled) {
+			return "Cancelled";
+		} else {
+			return "Ongoing";
+		}
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -149,6 +167,14 @@ public class Loan {
 
 	public void setType(LoanType type) {
 		this.type = type;
+	}
+
+	public boolean isCancelled() {
+		return cancelled;
+	}
+
+	public void setCancelled(boolean cancelled) {
+		this.cancelled = cancelled;
 	}
 
 }
