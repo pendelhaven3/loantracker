@@ -1,5 +1,6 @@
 package com.pj.loantracker.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,6 +16,9 @@ public class Client {
 	private Long id;
 
 	private String name;
+	
+	@Column(length = 4000)
+	private String remarks;
 
 	public Long getId() {
 		return id;
@@ -57,6 +61,14 @@ public class Client {
 		return new EqualsBuilder()
 				.append(id, other.getId())
 				.isEquals();
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 
 }

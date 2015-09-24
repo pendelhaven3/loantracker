@@ -13,6 +13,7 @@ import com.pj.loantracker.model.Client;
 import com.pj.loantracker.service.ClientService;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 @Controller
@@ -24,6 +25,7 @@ public class ClientController extends AbstractController {
 	@Autowired private ClientService clientService;
 	
 	@FXML private TextField nameField;
+	@FXML private TextArea remarksTextArea;
 	
 	@Parameter private Client client;
 	
@@ -33,6 +35,7 @@ public class ClientController extends AbstractController {
 			stageController.setTitle("Update Client");
 			client = clientService.getClient(client.getId());
 			nameField.setText(client.getName());
+			remarksTextArea.setText(client.getRemarks());
 		} else {
 			stageController.setTitle("Add Client");
 		}
@@ -52,6 +55,7 @@ public class ClientController extends AbstractController {
 			client = new Client();
 		}
 		client.setName(nameField.getText());
+		client.setRemarks(remarksTextArea.getText());
 		
 		try {
 			clientService.save(client);
