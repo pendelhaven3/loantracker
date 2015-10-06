@@ -96,12 +96,20 @@ public class Loan {
 		BigDecimal principal = amount;
 		BigDecimal rate = interestRate.divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
 		for (LoanPayment payment : payments) {
-			payment.setPrincipalPaid(payment.getAmount().subtract(rate.multiply(principal))
-					.divide(BigDecimal.ONE.subtract(rate), 2, RoundingMode.HALF_UP));
-			payment.setInterestPaid(payment.getAmount().subtract(payment.getPrincipalPaid()));
-			payment.setInterest(payment.getInterestPaid());
-			payment.setPrincipalRemaining(principal.subtract(payment.getPrincipalPaid()));
-			principal = payment.getPrincipalRemaining();
+			if (payment.getAmount().compareTo(BigDecimal.ZERO) == 0) {
+				payment.setPrincipalPaid(BigDecimal.ZERO);
+				payment.setInterestPaid(BigDecimal.ZERO);
+				payment.setInterest(principal.multiply(rate).setScale(2, RoundingMode.HALF_UP));
+				payment.setPrincipalRemaining(principal.add(payment.getInterest()));
+				principal = payment.getPrincipalRemaining();
+			} else {
+				payment.setPrincipalPaid(payment.getAmount().subtract(rate.multiply(principal))
+						.divide(BigDecimal.ONE.subtract(rate), 2, RoundingMode.HALF_UP));
+				payment.setInterestPaid(payment.getAmount().subtract(payment.getPrincipalPaid()));
+				payment.setInterest(payment.getInterestPaid());
+				payment.setPrincipalRemaining(principal.subtract(payment.getPrincipalPaid()));
+				principal = payment.getPrincipalRemaining();
+			}
 		}
 	}
 	
