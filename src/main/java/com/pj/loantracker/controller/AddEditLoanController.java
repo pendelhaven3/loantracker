@@ -11,7 +11,7 @@ import com.pj.loantracker.Parameter;
 import com.pj.loantracker.gui.component.ShowDialog;
 import com.pj.loantracker.model.Client;
 import com.pj.loantracker.model.Loan;
-import com.pj.loantracker.model.LoanType;
+import com.pj.loantracker.model.InterestType;
 import com.pj.loantracker.service.ClientService;
 import com.pj.loantracker.service.LoanService;
 import com.pj.loantracker.util.DateUtil;
@@ -37,14 +37,14 @@ public class AddEditLoanController extends AbstractController {
 	@FXML private TextField amountField;
 	@FXML private TextField interestField;
 	@FXML private DatePicker loanDatePicker;
-	@FXML private ComboBox<LoanType> loanTypeComboBox;
+	@FXML private ComboBox<InterestType> loanTypeComboBox;
 	
 	@Parameter private Loan loan;
 	
 	@Override
 	public void updateDisplay() {
 		clientComboBox.setItems(FXCollections.observableList(clientService.getAllClients()));
-		loanTypeComboBox.setItems(FXCollections.observableArrayList(LoanType.values()));
+		loanTypeComboBox.setItems(FXCollections.observableArrayList(InterestType.values()));
 		
 		if (loan != null) {
 			stageController.setTitle("Update Loan");

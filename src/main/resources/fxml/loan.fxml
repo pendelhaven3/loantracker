@@ -48,7 +48,7 @@
 				<Label fx:id="interestLabel"
 					GridPane.columnIndex="4" GridPane.rowIndex="1" />
 					
-				<Label text="Loan Type" prefWidth="120"
+				<Label text="Interest Type" prefWidth="120"
 					GridPane.columnIndex="0" GridPane.rowIndex="2" />
 				<Label fx:id="loanTypeLabel"
 					GridPane.columnIndex="1" GridPane.rowIndex="2" />

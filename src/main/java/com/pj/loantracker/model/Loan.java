@@ -36,7 +36,7 @@ public class Loan {
 	private List<LoanPayment> payments;
 	
 	@Enumerated(EnumType.STRING)
-	private LoanType type;
+	private InterestType type;
 
 	@Column(columnDefinition = "boolean default false")
 	private boolean cancelled;
@@ -161,11 +161,11 @@ public class Loan {
 		this.payments = payments;
 	}
 
-	public LoanType getType() {
+	public InterestType getType() {
 		return type;
 	}
 
-	public void setType(LoanType type) {
+	public void setType(InterestType type) {
 		this.type = type;
 	}
 
