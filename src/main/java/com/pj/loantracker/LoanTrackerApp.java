@@ -10,7 +10,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 @Component
-public class Main extends Application {
+public class LoanTrackerApp extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
