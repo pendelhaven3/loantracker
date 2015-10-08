@@ -11,7 +11,6 @@ import com.pj.loantracker.Parameter;
 import com.pj.loantracker.gui.component.ShowDialog;
 import com.pj.loantracker.model.Client;
 import com.pj.loantracker.model.Loan;
-import com.pj.loantracker.model.InterestType;
 import com.pj.loantracker.service.ClientService;
 import com.pj.loantracker.service.LoanService;
 import com.pj.loantracker.util.DateUtil;
@@ -37,14 +36,12 @@ public class AddEditLoanController extends AbstractController {
 	@FXML private TextField amountField;
 	@FXML private TextField interestField;
 	@FXML private DatePicker loanDatePicker;
-	@FXML private ComboBox<InterestType> loanTypeComboBox;
 	
 	@Parameter private Loan loan;
 	
 	@Override
 	public void updateDisplay() {
 		clientComboBox.setItems(FXCollections.observableList(clientService.getAllClients()));
-		loanTypeComboBox.setItems(FXCollections.observableArrayList(InterestType.values()));
 		
 		if (loan != null) {
 			stageController.setTitle("Update Loan");
@@ -55,7 +52,6 @@ public class AddEditLoanController extends AbstractController {
 			amountField.setText(FormatterUtil.formatAmount(loan.getAmount()));
 			interestField.setText(FormatterUtil.formatAmount(loan.getInterestRate()));
 			loanDatePicker.setValue(DateUtil.toLocalDate(loan.getLoanDate()));
-			loanTypeComboBox.setValue(loan.getType());
 		} else {
 			stageController.setTitle("Add New Loan");
 		}
@@ -79,7 +75,6 @@ public class AddEditLoanController extends AbstractController {
 		loan.setAmount(NumberUtil.toBigDecimal(amountField.getText()));
 		loan.setInterestRate(NumberUtil.toBigDecimal(interestField.getText()));
 		loan.setLoanDate(DateUtil.toDate(loanDatePicker.getValue()));
-		loan.setType(loanTypeComboBox.getValue());
 		
 		try {
 			loanService.save(loan);
@@ -127,12 +122,6 @@ public class AddEditLoanController extends AbstractController {
 		if (loanDatePicker.getValue() == null) {
 			ShowDialog.error("Loan Date must be specified");
 			loanDatePicker.requestFocus();
-			return false;
-		}
-		
-		if (loanTypeComboBox.getValue() == null) {
-			ShowDialog.error("Loan Type must be specified");
-			loanTypeComboBox.requestFocus();
 			return false;
 		}
 		

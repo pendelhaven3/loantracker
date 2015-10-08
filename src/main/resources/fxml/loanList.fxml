@@ -39,11 +39,6 @@
 					<AppPropertyValueFactory property="loanDate" />
 				</cellValueFactory>
 			</TableColumn>
-			<TableColumn text="Type" styleClass="center">
-				<cellValueFactory>
-					<AppPropertyValueFactory property="type" />
-				</cellValueFactory>
-			</TableColumn>
 			<TableColumn text="Status" styleClass="center">
 				<cellValueFactory>
 					<AppPropertyValueFactory property="status" />

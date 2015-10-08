@@ -65,9 +65,6 @@ public class LoanController extends AbstractController {
 		amountLabel.setText(FormatterUtil.formatAmount(loan.getAmount()));
 		interestLabel.setText(FormatterUtil.formatAmount(loan.getInterestRate()));
 		loanDateLabel.setText(FormatterUtil.formatDate(loan.getLoanDate()));
-		if (loan.getType() != null) {
-			loanTypeLabel.setText(loan.getType().toString());
-		}
 		statusLabel.setText(loan.getStatus());
 		
 		paymentsTable.setItems(FXCollections.observableList(loan.getPayments()));

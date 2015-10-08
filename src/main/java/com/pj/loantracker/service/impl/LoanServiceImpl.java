@@ -34,7 +34,7 @@ public class LoanServiceImpl implements LoanService {
 	@Override
 	public Loan getLoan(long id) {
 		Loan loan = loanDao.get(id);
-		loan.computeLoanPaymentCalculatedFields();
+		loan.computePaymentCalculatedFields();
 		return loan;
 	}
 

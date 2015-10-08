@@ -9,8 +9,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -39,9 +37,6 @@ public class Loan {
 	@OrderBy("paymentDate ASC")
 	private List<LoanPayment> payments;
 	
-	@Enumerated(EnumType.STRING)
-	private InterestType type;
-
 	@Column(columnDefinition = "boolean default false")
 	private boolean cancelled;
 	
@@ -50,18 +45,7 @@ public class Loan {
 		cancelled = false;
 	}
 	
-	public void computeLoanPaymentCalculatedFields() {
-		switch (type) {
-		case STANDARD:
-			computeStandardPaymentCalculatedFields();
-			break;
-		case ADVANCE_INTEREST:
-			computeAdvanceInterestPaymentCalculatedFields();
-			break;
-		}
-	}
-	
-	private void computeStandardPaymentCalculatedFields() {
+	public void computePaymentCalculatedFields() {
 		BigDecimal principal = amount;
 		for (LoanPayment payment : payments) {
 			BigDecimal interest = principal.multiply(
@@ -82,41 +66,6 @@ public class Loan {
 		}
 	}
 
-	/*
-	 * Variables:
-	 * x = principal paid
-	 * y = interest paid
-	 * 
-	 * Equation 1:
-	 * x + y = payment
-	 * 
-	 * Equation 2:
-	 * y = (principal - x) * rate
-	 * 
-	 * Solve for x and y!
-	 * 
-	 */
-	private void computeAdvanceInterestPaymentCalculatedFields() {
-		BigDecimal principal = amount;
-		BigDecimal rate = interestRate.divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
-		for (LoanPayment payment : payments) {
-			if (payment.getAmount().compareTo(BigDecimal.ZERO) == 0) {
-				payment.setPrincipalPaid(BigDecimal.ZERO);
-				payment.setInterestPaid(BigDecimal.ZERO);
-				payment.setInterest(principal.multiply(rate).setScale(2, RoundingMode.HALF_UP));
-				payment.setPrincipalRemaining(principal.add(payment.getInterest()));
-				principal = payment.getPrincipalRemaining();
-			} else {
-				payment.setPrincipalPaid(payment.getAmount().subtract(rate.multiply(principal))
-						.divide(BigDecimal.ONE.subtract(rate), 2, RoundingMode.HALF_UP));
-				payment.setInterestPaid(payment.getAmount().subtract(payment.getPrincipalPaid()));
-				payment.setInterest(payment.getInterestPaid());
-				payment.setPrincipalRemaining(principal.subtract(payment.getPrincipalPaid()));
-				principal = payment.getPrincipalRemaining();
-			}
-		}
-	}
-	
 	public String getStatus() {
 		if (cancelled) {
 			return "Cancelled";
@@ -171,14 +120,6 @@ public class Loan {
 
 	public void setPayments(List<LoanPayment> payments) {
 		this.payments = payments;
-	}
-
-	public InterestType getType() {
-		return type;
-	}
-
-	public void setType(InterestType type) {
-		this.type = type;
 	}
 
 	public boolean isCancelled() {

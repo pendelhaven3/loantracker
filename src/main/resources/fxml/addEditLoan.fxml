@@ -41,10 +41,6 @@
 					GridPane.columnIndex="0" GridPane.rowIndex="3" />
 				<AppDatePicker fx:id="loanDatePicker"
 					GridPane.columnIndex="1" GridPane.rowIndex="3" />
-				<Label text="Loan Type" prefWidth="100" 
-					GridPane.columnIndex="0" GridPane.rowIndex="4" />
-				<ComboBox fx:id="loanTypeComboBox" prefWidth="300"
-					GridPane.columnIndex="1" GridPane.rowIndex="4" />
 			</GridPane>
 		
 			<HBox spacing="10" alignment="center">

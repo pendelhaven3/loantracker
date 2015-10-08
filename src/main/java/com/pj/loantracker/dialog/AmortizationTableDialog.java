@@ -79,7 +79,6 @@ public class AmortizationTableDialog extends AbstractDialog {
 		Loan loan = new Loan();
 		loan.setAmount(this.loan.getAmount());
 		loan.setLoanDate(this.loan.getLoanDate());
-		loan.setType(this.loan.getType());
 		loan.setInterestRate(this.loan.getInterestRate());
 		
 		BigDecimal amortizationAmount = NumberUtil.toBigDecimal(monthlyPaymentField.getText());
@@ -92,23 +91,17 @@ public class AmortizationTableDialog extends AbstractDialog {
 			if (loan.getAmount().compareTo(amortizationAmount) >= 0) {
 				payment.setAmount(amortizationAmount);
 			} else {
-				switch (loan.getType()) {
-				case STANDARD:
-					BigDecimal rate = loan.getInterestRate().divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
-					payment.setAmount(loan.getAmount().add(
-							loan.getAmount().multiply(rate).setScale(2, RoundingMode.HALF_UP)));
-					break;
-				case ADVANCE_INTEREST:
-					payment.setAmount(loan.getAmount());
-					break;
-				}
+				BigDecimal rate = loan.getInterestRate().divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
+				payment.setAmount(loan.getAmount().add(
+						loan.getAmount().multiply(rate).setScale(2, RoundingMode.HALF_UP)));
+				break;
 			}
 			
 			paymentDateCalendar.add(Calendar.MONTH, 1);
 			payment.setPaymentDate(paymentDateCalendar.getTime());
 			
 			loan.setPayments(Arrays.asList(payment));
-			loan.computeLoanPaymentCalculatedFields();
+			loan.computePaymentCalculatedFields();
 			
 			payments.add(payment);
 			loan.setAmount(payment.getPrincipalRemaining());
@@ -145,7 +138,6 @@ public class AmortizationTableDialog extends AbstractDialog {
 		Loan loan = new Loan();
 		loan.setAmount(this.loan.getAmount());
 		loan.setLoanDate(this.loan.getLoanDate());
-		loan.setType(this.loan.getType());
 		loan.setInterestRate(this.loan.getInterestRate());
 		
 		BigDecimal amortizationAmount = NumberUtil.toBigDecimal(monthlyPaymentField.getText());
@@ -158,7 +150,7 @@ public class AmortizationTableDialog extends AbstractDialog {
 		}
 		
 		loan.setPayments(Arrays.asList(payment));
-		loan.computeLoanPaymentCalculatedFields();
+		loan.computePaymentCalculatedFields();
 		
 		return payment.getAmount().compareTo(payment.getInterest()) > 0;
 	}

@@ -34,7 +34,7 @@ public class LoanTest {
 		
 		loan.setPayments(Arrays.asList(payment1, payment2));
 		
-		loan.computeLoanPaymentCalculatedFields();
+		loan.computePaymentCalculatedFields();
 		
 		assertEquals(new BigDecimal("1.25"), payment1.getInterest());
 		assertEquals(new BigDecimal("1.25"), payment1.getInterestPaid());
