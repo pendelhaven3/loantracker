@@ -16,6 +16,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.Region?>
 <?import com.pj.loantracker.gui.component.AppDatePicker?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import com.pj.loantracker.gui.component.AppPropertyValueFactory?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.pj.loantracker.controller.LoanController">
 	<top>
@@ -65,14 +68,54 @@
 				<Button text="Cancel Loan" onAction="#cancelLoan" fx:id="cancelButton" />
 			</HBox>
 			
-			<LoanPaymentsTableView fx:id="paymentsTable">
-				<columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
-			</LoanPaymentsTableView>
-			
-			<HBox spacing="10" alignment="center">
-				<Button text="Add Payment" onAction="#addLoanPayment" fx:id="addPaymentButton" />
-				<Button text="Delete Payment" onAction="#deleteLoanPayment" fx:id="deletePaymentButton" />
-			</HBox>
+			<TabPane>
+				<tabs>
+					<Tab text="Payments" closable="false">
+						<VBox spacing="10">
+							<LoanPaymentsTableView fx:id="paymentsTable">
+								<columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+							</LoanPaymentsTableView>
+							
+							<HBox spacing="10" alignment="center">
+								<Button text="Add Payment" onAction="#addLoanPayment" fx:id="addPaymentButton" />
+								<Button text="Delete Payment" onAction="#deleteLoanPayment" fx:id="deletePaymentButton" />
+							</HBox>
+						</VBox>
+					</Tab>
+					<Tab text="Balance History" closable="false">
+						<TableView fx:id="balanceHistoryTable">
+							<columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+							<columns>
+								<TableColumn text="Type">
+									<cellValueFactory>
+										<AppPropertyValueFactory property="type" />
+									</cellValueFactory>
+								</TableColumn>
+								<TableColumn text="Date">
+									<cellValueFactory>
+										<AppPropertyValueFactory property="date" />
+									</cellValueFactory>
+								</TableColumn>
+								<TableColumn text="Principal Paid" styleClass="right">
+									<cellValueFactory>
+										<AppPropertyValueFactory property="principalPaid" />
+									</cellValueFactory>
+								</TableColumn>
+								<TableColumn text="Interest" styleClass="right">
+									<cellValueFactory>
+										<AppPropertyValueFactory property="interest" />
+									</cellValueFactory>
+								</TableColumn>
+								<TableColumn text="Principal Remaining" styleClass="right">
+									<cellValueFactory>
+										<AppPropertyValueFactory property="principalRemaining" />
+									</cellValueFactory>
+								</TableColumn>
+							</columns>
+						</TableView>
+					</Tab>
+				</tabs>
+			</TabPane>
 			
 		</VBox>
 	</center>

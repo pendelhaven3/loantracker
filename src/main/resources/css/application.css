@@ -11,3 +11,11 @@
 .right {
 	-fx-alignment: center-right;
 }
+
+.table-row-cell.interest-row .table-cell {
+	-fx-text-fill: red;
+}
+
+.table-row-cell:selected.interest-row .table-cell {
+	-fx-text-fill: white;
+}

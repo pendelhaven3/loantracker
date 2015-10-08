@@ -2,7 +2,8 @@ package com.pj.loantracker.model;
 
 public enum InterestType {
 
-	STANDARD("Standard"), ADVANCE_INTEREST("Advance Interest");
+	STANDARD("Standard"), 
+	ADVANCE_INTEREST("Advance Interest");
 
 	private String description;
 	

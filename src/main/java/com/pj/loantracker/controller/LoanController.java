@@ -17,6 +17,7 @@ import com.pj.loantracker.gui.component.DoubleClickEventHandler;
 import com.pj.loantracker.gui.component.ShowDialog;
 import com.pj.loantracker.model.Loan;
 import com.pj.loantracker.model.LoanPayment;
+import com.pj.loantracker.model.LoanRunningBalanceHistoryItem;
 import com.pj.loantracker.service.LoanService;
 import com.pj.loantracker.util.FormatterUtil;
 
@@ -24,6 +25,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 
@@ -49,6 +51,7 @@ public class LoanController extends AbstractController {
 	@FXML private Button addPaymentButton;
 	@FXML private Button deletePaymentButton;
 	@FXML private TableView<LoanPayment> paymentsTable;
+	@FXML private TableView<LoanRunningBalanceHistoryItem> balanceHistoryTable;
 	
 	@Parameter private Loan loan;
 	
@@ -79,6 +82,26 @@ public class LoanController extends AbstractController {
 				}
 			});
 		}
+		
+		balanceHistoryTable.getItems().setAll(loan.generateRunningBalanceHistory());
+		balanceHistoryTable.setRowFactory(tableView -> {
+			TableRow<LoanRunningBalanceHistoryItem> row = new TableRow<LoanRunningBalanceHistoryItem>() {
+				
+				@Override
+				protected void updateItem(LoanRunningBalanceHistoryItem item, boolean empty) {
+					super.updateItem(item, empty);
+					getStyleClass().remove("interest-row");
+					if (!empty) {
+						if (item.getType().equals("Interest")) {
+							getStyleClass().add("interest-row");
+						}
+					}
+				}
+
+			};
+			row.updateTableView(tableView);
+			return row;
+		});
 		
 		deleteButton.setDisable(false);
 		

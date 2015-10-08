@@ -2,6 +2,8 @@ package com.pj.loantracker.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
+
+import com.pj.loantracker.util.DateUtil;
 
 @Entity
 public class Loan {
@@ -185,4 +189,52 @@ public class Loan {
 		this.cancelled = cancelled;
 	}
 
+	public List<LoanRunningBalanceHistoryItem> generateRunningBalanceHistory() {
+		List<LoanRunningBalanceHistoryItem> items = new ArrayList<>();
+		
+		for (LoanPayment payment : payments) {
+			LoanRunningBalanceHistoryItem item = new LoanRunningBalanceHistoryItem();
+			item.setType("Payment");
+			item.setDate(payment.getPaymentDate());
+			item.setPrincipalPaid(payment.getAmount());
+			items.add(item);
+		}
+		
+		for (Date interestDate : DateUtil.generateMonthlyDates(loanDate, new Date())) {
+			LoanRunningBalanceHistoryItem item = new LoanRunningBalanceHistoryItem();
+			item.setType("Interest");
+			item.setDate(interestDate);
+			items.add(item);
+		}
+		
+		Collections.sort(items, (o1, o2) -> {
+			int result = o1.getDate().compareTo(o2.getDate());
+			if (result == 0) {
+				if (o1.getType().equals("Interest")) {
+					return -1;
+				} else if (o2.getType().equals("Interest")) {
+					return 1;
+				}
+			}
+			return result;
+		});
+		
+		BigDecimal principal = amount;
+		BigDecimal rate = interestRate.divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
+		for (LoanRunningBalanceHistoryItem item : items) {
+			switch (item.getType()) {
+			case "Payment":
+				item.setPrincipalRemaining(principal.subtract(item.getPrincipalPaid()));
+				break;
+			case "Interest":
+				item.setInterest(principal.multiply(rate).setScale(2, RoundingMode.HALF_UP));
+				item.setPrincipalRemaining(principal.add(item.getInterest()));
+				break;
+			}
+			principal = item.getPrincipalRemaining();
+		}
+		
+		return items;
+	}
+	
 }
