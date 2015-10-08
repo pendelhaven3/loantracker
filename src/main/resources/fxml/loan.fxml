@@ -12,7 +12,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.GridPane?>
-<?import com.pj.loantracker.gui.table.LoanPaymentsTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.Region?>
 <?import com.pj.loantracker.gui.component.AppDatePicker?>
@@ -72,9 +71,32 @@
 				<tabs>
 					<Tab text="Payments" closable="false">
 						<VBox spacing="10">
-							<LoanPaymentsTableView fx:id="paymentsTable">
+							<TableView fx:id="paymentsTable">
 								<columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
-							</LoanPaymentsTableView>
+								<columns>
+									<TableColumn text="Payment Date">
+										<cellValueFactory>
+											<AppPropertyValueFactory property="paymentDate" />
+										</cellValueFactory>
+									</TableColumn>
+									<TableColumn text="Bank">
+										<cellValueFactory>
+											<AppPropertyValueFactory property="bank" />
+										</cellValueFactory>
+									</TableColumn>
+									<TableColumn text="Check Number">
+										<cellValueFactory>
+											<AppPropertyValueFactory property="checkNumber" />
+										</cellValueFactory>
+									</TableColumn>
+									<TableColumn text="Amount" styleClass="right">
+										<cellValueFactory>
+											<AppPropertyValueFactory property="amount" />
+										</cellValueFactory>
+									</TableColumn>
+								</columns>
+							</TableView>
+							
 							
 							<HBox spacing="10" alignment="center">
 								<Button text="Add Payment" onAction="#addLoanPayment" fx:id="addPaymentButton" />
