@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import com.pj.loantracker.Parameter;
 import com.pj.loantracker.gui.component.ShowDialog;
 import com.pj.loantracker.model.Client;
+import com.pj.loantracker.model.InterestType;
 import com.pj.loantracker.model.Loan;
 import com.pj.loantracker.service.ClientService;
 import com.pj.loantracker.service.LoanService;
@@ -36,12 +37,14 @@ public class AddEditLoanController extends AbstractController {
 	@FXML private TextField amountField;
 	@FXML private TextField interestField;
 	@FXML private DatePicker loanDatePicker;
+	@FXML private ComboBox<InterestType> interestTypeComboBox;
 	
 	@Parameter private Loan loan;
 	
 	@Override
 	public void updateDisplay() {
 		clientComboBox.setItems(FXCollections.observableList(clientService.getAllClients()));
+		interestTypeComboBox.getItems().setAll(InterestType.values());
 		
 		if (loan != null) {
 			stageController.setTitle("Update Loan");
@@ -52,6 +55,7 @@ public class AddEditLoanController extends AbstractController {
 			amountField.setText(FormatterUtil.formatAmount(loan.getAmount()));
 			interestField.setText(FormatterUtil.formatAmount(loan.getInterestRate()));
 			loanDatePicker.setValue(DateUtil.toLocalDate(loan.getLoanDate()));
+			interestTypeComboBox.setValue(loan.getInterestType());
 		} else {
 			stageController.setTitle("Add New Loan");
 		}
@@ -75,6 +79,7 @@ public class AddEditLoanController extends AbstractController {
 		loan.setAmount(NumberUtil.toBigDecimal(amountField.getText()));
 		loan.setInterestRate(NumberUtil.toBigDecimal(interestField.getText()));
 		loan.setLoanDate(DateUtil.toDate(loanDatePicker.getValue()));
+		loan.setInterestType(interestTypeComboBox.getValue());
 		
 		try {
 			loanService.save(loan);

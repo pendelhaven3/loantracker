@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -39,6 +41,10 @@ public class Loan {
 	
 	@Column(columnDefinition = "boolean default false")
 	private boolean cancelled;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "varchar(100) default 'NON_ADVANCE_INTEREST'")
+	private InterestType interestType;
 	
 	@PrePersist
 	private void preInsert() {
@@ -176,6 +182,14 @@ public class Loan {
 		}
 		
 		return items;
+	}
+
+	public InterestType getInterestType() {
+		return interestType;
+	}
+
+	public void setInterestType(InterestType interestType) {
+		this.interestType = interestType;
 	}
 	
 }

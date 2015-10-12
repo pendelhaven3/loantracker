@@ -34,6 +34,11 @@
 					<AppPropertyValueFactory property="interestRate" />
 				</cellValueFactory>
 			</TableColumn>
+			<TableColumn text="Interest Type" styleClass="center">
+				<cellValueFactory>
+					<AppPropertyValueFactory property="interestType" />
+				</cellValueFactory>
+			</TableColumn>
 			<TableColumn text="Loan Date" styleClass="center">
 				<cellValueFactory>
 					<AppPropertyValueFactory property="loanDate" />

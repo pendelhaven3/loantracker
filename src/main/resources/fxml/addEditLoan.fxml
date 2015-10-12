@@ -25,7 +25,7 @@
 	<center>
 		<VBox alignment="center" spacing="10">
 			<GridPane vgap="10" alignment="center">
-				<Label text="Client" prefWidth="100" 
+				<Label text="Client" prefWidth="130" 
 					GridPane.columnIndex="0" GridPane.rowIndex="0" />
 				<ComboBox fx:id="clientComboBox" prefWidth="300"
 					GridPane.columnIndex="1" GridPane.rowIndex="0" />
@@ -41,6 +41,10 @@
 					GridPane.columnIndex="0" GridPane.rowIndex="3" />
 				<AppDatePicker fx:id="loanDatePicker"
 					GridPane.columnIndex="1" GridPane.rowIndex="3" />
+				<Label text="Interest Type" 
+					GridPane.columnIndex="0" GridPane.rowIndex="4" />
+				<ComboBox fx:id="interestTypeComboBox"
+					GridPane.columnIndex="1" GridPane.rowIndex="4" />
 			</GridPane>
 		
 			<HBox spacing="10" alignment="center">

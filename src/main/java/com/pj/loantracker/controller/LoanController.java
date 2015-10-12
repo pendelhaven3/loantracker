@@ -43,7 +43,7 @@ public class LoanController extends AbstractController {
 	@FXML private Label amountLabel;
 	@FXML private Label interestLabel;
 	@FXML private Label loanDateLabel;
-	@FXML private Label loanTypeLabel;
+	@FXML private Label interestTypeLabel;
 	@FXML private Label statusLabel;
 	@FXML private Button deleteButton;
 	@FXML private Button generateAmortizationTableButton;
@@ -65,6 +65,7 @@ public class LoanController extends AbstractController {
 		amountLabel.setText(FormatterUtil.formatAmount(loan.getAmount()));
 		interestLabel.setText(FormatterUtil.formatAmount(loan.getInterestRate()));
 		loanDateLabel.setText(FormatterUtil.formatDate(loan.getLoanDate()));
+		interestTypeLabel.setText(loan.getInterestType().toString());
 		statusLabel.setText(loan.getStatus());
 		
 		paymentsTable.setItems(FXCollections.observableList(loan.getPayments()));
