@@ -171,7 +171,9 @@ public class Loan {
 		for (LoanRunningBalanceHistoryItem item : items) {
 			switch (item.getType()) {
 			case "Payment":
-				item.setPrincipalRemaining(principal.subtract(item.getPrincipalPaid()));
+				if (DateUtil.compareTo(item.getDate(), new Date()) <= 0) {
+					item.setPrincipalRemaining(principal.subtract(item.getPrincipalPaid()));
+				}
 				break;
 			case "Interest":
 				item.setInterest(principal.multiply(rate).setScale(2, RoundingMode.HALF_UP));

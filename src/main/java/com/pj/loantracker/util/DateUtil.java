@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTimeComparator;
+
 import com.pj.loantracker.Constants;
 
 public class DateUtil {
@@ -42,6 +44,10 @@ public class DateUtil {
 		}
 		
 		return dates;
+	}
+	
+	public static int compareTo(Date date1, Date date2) {
+		return DateTimeComparator.getDateOnlyInstance().compare(date1, date2);
 	}
 	
 }
