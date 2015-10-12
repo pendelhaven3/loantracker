@@ -47,4 +47,9 @@ public class LoanTest {
 		assertEquals(new BigDecimal("91.39"), payment2.getPrincipalRemaining());
 	}
 	
+	@Test
+	public void generateFixedMonthlyPaymentAmortizationTable() {
+		
+	}
+	
 }

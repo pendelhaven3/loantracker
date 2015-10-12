@@ -3,6 +3,7 @@ package com.pj.loantracker.model;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
+
+import org.apache.commons.lang.time.DateUtils;
 
 import com.pj.loantracker.util.DateUtil;
 
@@ -192,6 +195,100 @@ public class Loan {
 
 	public void setInterestType(InterestType interestType) {
 		this.interestType = interestType;
+	}
+
+	public List<LoanPayment> generateFixedMonthlyPaymentAmortizationTable(BigDecimal monthlyPayment) {
+		List<LoanPayment> payments = new ArrayList<>();
+		Calendar paymentDateCalendar = DateUtils.toCalendar(loanDate);
+		BigDecimal principal = amount;
+		BigDecimal rate = interestRate.divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
+		while (principal.compareTo(BigDecimal.ZERO) > 0) {
+			LoanPayment payment = new LoanPayment();
+			
+			switch (interestType) {
+			case NON_ADVANCE_INTEREST:
+				payment.setInterest(principal.multiply(rate).setScale(2, RoundingMode.HALF_UP));
+				if (principal.compareTo(monthlyPayment) >= 0) {
+					payment.setAmount(monthlyPayment);
+					payment.setPrincipalPaid(monthlyPayment.subtract(payment.getInterest()));
+				} else {
+					payment.setPrincipalPaid(principal);
+					payment.setAmount(principal.add(payment.getInterest()));
+				}
+				break;
+			/*
+			 * Formula:
+			 * x = payment to principal
+			 * y = interest 
+			 * 
+			 * eq. 1: x + y = <monthly payment>
+			 * eq. 2: (<principal> - x) * rate = y
+			 */
+			case ADVANCE_INTEREST:
+				if (principal.compareTo(monthlyPayment) >= 0) {
+					payment.setAmount(monthlyPayment);
+				} else {
+					payment.setAmount(principal);
+				}
+				payment.setPrincipalPaid(payment.getAmount().subtract(rate.multiply(principal))
+						.divide(BigDecimal.ONE.subtract(rate), 2, RoundingMode.HALF_UP));
+				payment.setInterest(payment.getAmount().subtract(payment.getPrincipalPaid()));
+				break;
+			}
+			
+			payment.setPrincipalRemaining(principal.subtract(payment.getPrincipalPaid()));
+			
+			paymentDateCalendar.add(Calendar.MONTH, 1);
+			payment.setPaymentDate(paymentDateCalendar.getTime());
+			
+			payments.add(payment);
+			
+			principal = payment.getPrincipalRemaining();
+		}
+		
+		return payments;
+	}
+
+	public List<LoanPayment> generateFixedMonthlyPaymentToPrincipalAmortizationTable(BigDecimal monthlyPayment) {
+		List<LoanPayment> payments = new ArrayList<>();
+		Calendar paymentDateCalendar = DateUtils.toCalendar(loanDate);
+		BigDecimal principal = amount;
+		BigDecimal rate = interestRate.divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
+		while (principal.compareTo(BigDecimal.ZERO) > 0) {
+			LoanPayment payment = new LoanPayment();
+			
+			switch (interestType) {
+			case NON_ADVANCE_INTEREST:
+				payment.setInterest(principal.multiply(rate).setScale(2, RoundingMode.HALF_UP));
+				if (principal.compareTo(monthlyPayment) >= 0) {
+					payment.setPrincipalPaid(monthlyPayment);
+				} else {
+					payment.setPrincipalPaid(principal);
+				}
+				payment.setAmount(payment.getPrincipalPaid().add(payment.getInterest()));
+				break;
+			case ADVANCE_INTEREST:
+				if (principal.compareTo(monthlyPayment) >= 0) {
+					payment.setPrincipalPaid(monthlyPayment);
+				} else {
+					payment.setPrincipalPaid(principal);
+				}
+				payment.setInterest(principal.subtract(payment.getPrincipalPaid()).multiply(rate).setScale(2, RoundingMode.HALF_UP));
+				payment.setAmount(payment.getPrincipalPaid().add(payment.getInterest()));
+				break;
+			}
+			
+			payment.setPrincipalRemaining(principal.subtract(payment.getPrincipalPaid()));
+			
+			paymentDateCalendar.add(Calendar.MONTH, 1);
+			payment.setPaymentDate(paymentDateCalendar.getTime());
+			
+			payments.add(payment);
+			
+			principal = payment.getPrincipalRemaining();
+		}
+		
+		return payments;
 	}
 	
 }
