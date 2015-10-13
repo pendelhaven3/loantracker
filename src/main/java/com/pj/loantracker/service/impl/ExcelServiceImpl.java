@@ -49,7 +49,6 @@ public class ExcelServiceImpl implements ExcelService {
 		
 		Sheet sheet = workbook.getSheetAt(0);
 		Cell cell = null;
-		Row row = null;
 		
 		cell = sheet.getRow(0).createCell(1);
 		cell.setCellValue(report.getLoan().getClient().getName());
@@ -66,10 +65,124 @@ public class ExcelServiceImpl implements ExcelService {
 		cell.setCellValue(report.getLoan().getInterestRate().doubleValue());
 		cell.setCellStyle(amountCellStyle);
 		
-		LoanPayment payment = report.getPayments().get(0);
-		row = sheet.getRow(6);
+		switch (report.getLoan().getInterestType()) {
+		case NON_ADVANCE_INTEREST:
+			generateNonAdvanceInterestAmortizationTableData(workbook, report);
+		case ADVANCE_INTEREST:
+			generateAdvanceInterestAmortizationTable(workbook, report);
+		}
 		
-		cell = row.createCell(0);
+		XSSFFormulaEvaluator.evaluateAllFormulaCells(workbook);
+		return workbook;
+	}
+
+	private void generateAdvanceInterestAmortizationTable(XSSFWorkbook workbook, AmortizationTableReport report) {
+		CellStyle amountCellStyle = createAmountCellStyle(workbook);
+		CellStyle dateCellStyle = createDateCellStyle(workbook);
+		Sheet sheet = workbook.getSheetAt(0);
+		
+		LoanPayment payment = report.getPayments().get(0);
+		Row row = sheet.getRow(6);
+		
+		Cell cell = row.createCell(0);
+		cell.setCellValue(payment.getPaymentDate());
+		cell.setCellStyle(dateCellStyle);
+		
+		// payment amount
+		if (report.isFixedMonthlyPaymentToPrincipal()) {
+			cell = row.createCell(1, XSSFCell.CELL_TYPE_FORMULA);
+			cell.setCellFormula(
+					MessageFormat.format("{0}+{1}", 
+							getCellName(row.getRowNum() + 1, 3), 
+							getCellName(row.getRowNum() + 1, 4)));
+		} else {
+			cell = row.createCell(1);
+			cell.setCellValue(payment.getAmount().doubleValue());
+		}
+		cell.setCellStyle(amountCellStyle);
+		
+		// interest
+		cell = row.createCell(2, XSSFCell.CELL_TYPE_FORMULA);
+		cell.setCellFormula("ROUND(($B$3-D7)*$B$4/100,2)");
+		cell.setCellStyle(amountCellStyle);
+
+		// principal paid
+		if (report.isFixedMonthlyPaymentToPrincipal()) {
+			cell = row.createCell(3);
+			cell.setCellValue(payment.getPrincipalPaid().doubleValue());
+		} else {
+			cell = row.createCell(3, XSSFCell.CELL_TYPE_FORMULA);
+			cell.setCellFormula("ROUND((B7-$B$4/100*$B$3)/(1-$B$4/100),2)");
+		}
+		cell.setCellStyle(amountCellStyle);
+		
+		// principal remaining
+		cell = row.createCell(4, XSSFCell.CELL_TYPE_FORMULA);
+		cell.setCellFormula("$B$3-D7");
+		cell.setCellStyle(amountCellStyle);
+		
+		for (int i = 1; i < report.getPayments().size(); i++) {
+			payment = report.getPayments().get(i);
+			row = sheet.createRow(6 + i);
+			
+			cell = row.createCell(0, XSSFCell.CELL_TYPE_FORMULA);
+			cell.setCellFormula(
+					MessageFormat.format("EDATE({0},1)", getCellName(row.getRowNum(), 1)));
+			cell.setCellStyle(dateCellStyle);
+			
+			// payment amount
+			if (report.isFixedMonthlyPaymentToPrincipal()) {
+				cell = row.createCell(1, XSSFCell.CELL_TYPE_FORMULA);
+				cell.setCellFormula(
+						MessageFormat.format("{0}+{1}", 
+								getCellName(row.getRowNum() + 1, 3), 
+								getCellName(row.getRowNum() + 1, 4)));
+			} else {
+				cell = row.createCell(1);
+				cell.setCellValue(payment.getAmount().doubleValue());
+			}
+			cell.setCellStyle(amountCellStyle);
+			
+			// interest
+			cell = row.createCell(2, XSSFCell.CELL_TYPE_FORMULA);
+			cell.setCellFormula(
+					MessageFormat.format("ROUND(({0}-{1})*$B$4/100,2)", 
+							getCellName(row.getRowNum(), 5),
+							getCellName(row.getRowNum() + 1, 4)));
+			cell.setCellStyle(amountCellStyle);
+
+			// principal paid
+			if (report.isFixedMonthlyPaymentToPrincipal()) {
+				cell = row.createCell(3);
+				cell.setCellValue(payment.getPrincipalPaid().doubleValue());
+			} else {
+				cell = row.createCell(3, XSSFCell.CELL_TYPE_FORMULA);
+				cell.setCellFormula(
+						MessageFormat.format("ROUND(({0}-$B$4/100*{1})/(1-$B$4/100),2)", 
+								getCellName(row.getRowNum() + 1, 2),
+								getCellName(row.getRowNum(), 5)));
+			}
+			cell.setCellStyle(amountCellStyle);
+			
+			cell = row.createCell(4, XSSFCell.CELL_TYPE_FORMULA);
+			cell.setCellFormula(
+					MessageFormat.format("{0}-{1}", 
+							getCellName(row.getRowNum(), 5), 
+							getCellName(row.getRowNum() + 1, 4)));
+			cell.setCellStyle(amountCellStyle);
+		}
+	}
+
+	private void generateNonAdvanceInterestAmortizationTableData(
+			XSSFWorkbook workbook, AmortizationTableReport report) {
+		CellStyle amountCellStyle = createAmountCellStyle(workbook);
+		CellStyle dateCellStyle = createDateCellStyle(workbook);
+		Sheet sheet = workbook.getSheetAt(0);
+		
+		LoanPayment payment = report.getPayments().get(0);
+		Row row = sheet.getRow(6);
+		
+		Cell cell = row.createCell(0);
 		cell.setCellValue(payment.getPaymentDate());
 		cell.setCellStyle(dateCellStyle);
 		
@@ -147,9 +260,6 @@ public class ExcelServiceImpl implements ExcelService {
 							getCellName(row.getRowNum() + 1, 4)));
 			cell.setCellStyle(amountCellStyle);
 		}
-		
-		XSSFFormulaEvaluator.evaluateAllFormulaCells(workbook);
-		return workbook;
 	}
 
 	private String getCellName(int row, int column) {
