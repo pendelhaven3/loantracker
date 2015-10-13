@@ -14,25 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.pj.loantracker.Parameter;
 import com.pj.loantracker.gui.component.ShowDialog;
 import com.pj.loantracker.model.Loan;
 import com.pj.loantracker.model.LoanPayment;
 import com.pj.loantracker.model.report.AmortizationTableReport;
 import com.pj.loantracker.service.ExcelService;
-import com.pj.loantracker.util.FormatterUtil;
 import com.pj.loantracker.util.NumberUtil;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
@@ -141,136 +130,6 @@ public class AmortizationTableDialog extends AbstractDialog {
 		return !isMonthlyPaymentFieldSpecified() && !isMonthlyPaymentToPrincipalFieldSpecified();
 	}
 
-	@FXML public void generateAmortizationTableAsPdf() {
-		if (!validateFields()) {
-			return;
-		}
-		
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save File");
-        fileChooser.setInitialDirectory(Paths.get(System.getProperty("user.home"), "Desktop").toFile());
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("PDF files", "*.pdf"));
-        File file = fileChooser.showSaveDialog(this);
-        if (file == null) {
-        	return;
-        }
-        
-		generateAmortizationTable();
-		
-		Document document = new Document();
-		try {
-			PdfWriter.getInstance(document, new FileOutputStream(file));
-			document.open();
-			document.add(createLoanAmountLine());
-			document.add(createInterestRateLine());
-			document.add(createPdfTables());
-			document.add(createTotalPaymentsField());
-		} catch (Exception e) {
-			ShowDialog.unexpectedError();
-		} finally {
-			document.close();
-		}
-	}
-
-	private Element createLoanAmountLine() {
-		Paragraph paragraph = new Paragraph("Loan Amount: " + FormatterUtil.formatAmount(loan.getAmount()), 
-				createHeaderFont());
-		paragraph.setIndentationLeft(50);
-		return paragraph;
-	}
-
-	private Element createInterestRateLine() {
-		Paragraph paragraph = new Paragraph("Interest: " + FormatterUtil.formatAmount(loan.getInterestRate()) + "%", 
-				createHeaderFont());
-		paragraph.setIndentationLeft(50);
-		paragraph.setSpacingAfter(10);
-		return paragraph;
-	}
-
-	private Element createTotalPaymentsField() {
-		return createCenteredText("Total Payments: " + paymentsTable.getItems().size());
-	}
-
-	private Element createCenteredText(String text) {
-		Paragraph paragraph = new Paragraph(text, createHeaderFont());
-		paragraph.setAlignment(Element.ALIGN_CENTER);
-		return paragraph;
-	}
-	
-	private PdfPTable createPdfTables() {
-		ObservableList<LoanPayment> payments = paymentsTable.getItems();
-		
-		PdfPTable table = new PdfPTable(5);
-		PdfPCell cell = null;
-		Font fontBold = createHeaderFont();
-		Font fontNormal = createNormalFont();
-		
-		cell = new PdfPCell(new Phrase("Payment Date", fontBold));
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table.addCell(cell);
-		
-		cell = new PdfPCell(new Phrase("Amount", fontBold));
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table.addCell(cell);
-		
-		cell = new PdfPCell(new Phrase("Interest Paid", fontBold));
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table.addCell(cell);
-		
-		cell = new PdfPCell(new Phrase("Principal Paid", fontBold));
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table.addCell(cell);
-		
-		cell = new PdfPCell(new Phrase("Principal Remaining", fontBold));
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table.addCell(cell);
-		
-		for (LoanPayment payment : payments) {
-			cell = new PdfPCell(new Phrase(FormatterUtil.formatDate(payment.getPaymentDate()), fontNormal));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(cell);
-			
-			cell = new PdfPCell(new Phrase(FormatterUtil.formatAmount(payment.getAmount()), fontNormal));
-			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-			table.addCell(cell);
-			
-			cell = new PdfPCell(new Phrase(FormatterUtil.formatAmount(payment.getInterestPaid()), fontNormal));
-			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-			table.addCell(cell);
-			
-			cell = new PdfPCell(new Phrase(FormatterUtil.formatAmount(payment.getPrincipalPaid()), fontNormal));
-			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-			table.addCell(cell);
-			
-			cell = new PdfPCell(new Phrase(FormatterUtil.formatAmount(payment.getPrincipalRemaining()), fontNormal));
-			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-			table.addCell(cell);
-			
-			table.completeRow();
-		}
-		return table;
-	}
-
-	private Font createNormalFont() {
-		try {
-			BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA, 
-					BaseFont.WINANSI, BaseFont.EMBEDDED);
-			return new Font(baseFont, 10);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private Font createHeaderFont() {
-		try {
-			BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA_BOLD, 
-					BaseFont.WINANSI, BaseFont.EMBEDDED);
-			return new Font(baseFont, 10);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
 	@FXML public void generateAmortizationTableAsExcel() {
 		if (!validateFields()) {
 			return;
